@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#14211e">
+  <meta name="description" content="Demostración interactiva para el Centro de Fisioterapia y Entrenamiento Paco González: atención, reservas y recordatorios simulados.">
+  <title>Paco González · Fisioterapia, entrenamiento y una nueva forma de atender</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <div class="demo-ribbon" role="note"><span class="live-dot" aria-hidden="true"></span> DEMOSTRACIÓN INTERACTIVA <span class="ribbon-separator">/</span> Sin citas, llamadas ni mensajes reales</div>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Paco González, volver al inicio">
+      <span class="brand-mark" aria-hidden="true"><span>PG</span><i></i></span>
+      <span class="brand-copy"><strong>PACO<br>GONZÁLEZ</strong><small>FISIOTERAPIA + ENTRENAMIENTO</small></span>
+    </a>
+    <nav aria-label="Navegación principal">
+      <a href="#enfoque">El centro</a>
+      <a href="#servicios">Qué hacemos</a>
+      <a href="#demo">Probar asistente</a>
+    </nav>
+    <a class="header-cta" href="#demo">PROBAR DEMO <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="contenido">
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="hero-photo" aria-hidden="true"></div>
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="eyebrow"><span class="eyebrow-line"></span> ROQUETAS DE MAR · MOVIMIENTO CON PROPÓSITO</p>
+        <h1 id="hero-title">MUÉVETE<br><span>CON</span> CONFIANZA<span class="period">.</span></h1>
+        <p class="hero-intro">Fisioterapia, readaptación y entrenamiento en un mismo camino: el tuyo.</p>
+        <div class="hero-actions">
+          <a class="button button-lime" href="#demo">PRUEBA LA SECRETARÍA <span aria-hidden="true">↗</span></a>
+          <a class="button button-outline" href="#servicios">CONOCE EL CENTRO <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+      <div class="hero-stamp" aria-hidden="true"><span>AVANZA<br>A TU<br>RITMO</span><svg viewBox="0 0 64 64"><path d="M8 49 45 12M24 12h21v21"/></svg></div>
+      <p class="image-credit">IMAGEN CONCEPTUAL · NO REPRESENTA AL CENTRO NI A SU EQUIPO</p>
+      <div class="hero-bottom"><span>01 / UNA DEMO PARA PACO</span><span>DESLIZA PARA DESCUBRIR <span aria-hidden="true">↓</span></span></div>
+    </section>
+
+    <section class="manifesto section-pad" id="enfoque" aria-labelledby="manifesto-title">
+      <div class="section-index"><span>01</span> EL ENFOQUE</div>
+      <div class="manifesto-body">
+        <p class="kicker">UN CENTRO. DISTINTAS FORMAS DE AVANZAR.</p>
+        <h2 id="manifesto-title">NO SE TRATA SOLO<br>DE <em>VOLVER.</em><br>SE TRATA DE <span>SEGUIR.</span></h2>
+        <p>Una identidad a la altura de un centro que conecta fisioterapia y entrenamiento. Clara, activa y sin tópicos de clínica genérica.</p>
+      </div>
+      <div class="orbit ornament" aria-hidden="true"><div></div><span>PROGRESO EN MOVIMIENTO</span></div>
+    </section>
+
+    <section class="services section-pad" id="servicios" aria-labelledby="services-title">
+      <div class="section-head">
+        <div><div class="section-index"><span>02</span> QUÉ HACEMOS</div><h2 id="services-title">TU SIGUIENTE<br><em>MOVIMIENTO.</em></h2></div>
+        <p>Distintas maneras de trabajar por un mismo objetivo: moverte mejor y avanzar a tu ritmo.</p>
+      </div>
+      <div class="service-grid">
+        <article class="service-card service-card-lime"><span class="service-number">01 /</span><div class="service-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M14 40c8-18 13-18 19-2 6 16 11 13 17-13M12 53h40"/></svg></div><h3>FISIOTERAPIA<br>AVANZADA</h3><p>Un espacio para atenderte y trabajar tu movimiento.</p><span class="card-corner" aria-hidden="true">↗</span></article>
+        <article class="service-card service-card-dark"><span class="service-number">02 /</span><div class="service-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M14 17v30M50 17v30M20 24v16M44 24v16M20 32h24"/></svg></div><h3>ENTRENAMIENTO<br>PERSONAL</h3><p>Una propuesta de entrenamiento adaptada a la persona.</p><span class="card-corner" aria-hidden="true">↗</span></article>
+        <article class="service-card service-card-coral"><span class="service-number">03 /</span><div class="service-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="22" cy="22" r="6"/><circle cx="42" cy="22" r="6"/><path d="M10 48c0-9 5-14 12-14s12 5 12 14M30 48c0-9 5-14 12-14s12 5 12 14"/></svg></div><h3>ENTRENAMIENTO<br>EN GRUPOS</h3><p>Movimiento compartido, constancia y energía de equipo.</p><span class="card-corner" aria-hidden="true">↗</span></article>
+        <article class="service-card service-card-cream"><span class="service-number">04 /</span><div class="service-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="m11 43 13-14 9 7 20-23M40 13h13v13"/></svg></div><h3>READAPTACIÓN<br>DE LESIONES</h3><p>Una vuelta progresiva a la actividad y al entrenamiento.</p><span class="card-corner" aria-hidden="true">↗</span></article>
+      </div>
+      <p class="service-footnote">Servicios basados en la información facilitada para esta demostración. El contenido definitivo se revisará con el centro.</p>
+    </section>
+
+    <section class="transition-band" aria-label="Presentación de la demostración"><div class="marquee-track" aria-hidden="true"><span>MENOS ESPERAS <b>✳</b> MÁS MOVIMIENTO <b>✳</b> MENOS ESPERAS <b>✳</b> MÁS MOVIMIENTO <b>✳</b></span><span>MENOS ESPERAS <b>✳</b> MÁS MOVIMIENTO <b>✳</b> MENOS ESPERAS <b>✳</b> MÁS MOVIMIENTO <b>✳</b></span></div></section>
+
+    <section class="demo-section section-pad" id="demo" aria-labelledby="demo-title">
+      <div class="demo-heading"><div><div class="section-index"><span>03</span> PRUÉBALO TÚ MISMO</div><h2 id="demo-title">UNA SECRETARÍA<br>QUE <em>RESPONDE.</em></h2></div><p>Entra como paciente de prueba. Consulta huecos de una agenda ficticia, reserva, recibe un recordatorio simulado y cancela. Todo ocurre aquí, sin tocar el centro real.</p></div>
+      <div class="safety-note" role="note"><span class="safety-icon" aria-hidden="true">i</span><p><strong>Entorno de demostración.</strong> Las fechas y horas son ejemplos inventados. No se hacen llamadas, no se envía WhatsApp y no se crean citas reales. No introduzcas datos personales o de salud.</p></div>
+      <div class="demo-shell">
+        <div class="demo-main">
+          <div class="demo-topline"><div><span class="status-pulse" aria-hidden="true"></span><span>SIMULACIÓN GUIADA</span></div><span>DEMO / PACO GONZÁLEZ</span></div>
+          <div class="channel-switch" role="group" aria-label="Canal de la simulación"><button type="button" class="channel active" data-channel="whatsapp" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5A8 8 0 0 1 8.5 19L4 20l1-4.5A8 8 0 1 1 20 11.5Z"/><path d="M9 9c.3 2 2 3.7 4 4.1l1.3-1 1.4 1.1c-.4 1.4-1.5 2-2.8 1.7-2.8-.6-5.3-3-5.8-5.8-.2-1.3.3-2.4 1.7-2.8L10 7.7 9 9Z"/></svg> WHATSAPP</button><button type="button" class="channel" data-channel="call" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h4l2 5-2.4 1.7a15 15 0 0 0 5.7 5.7L16 13l5 2v4c0 1.1-.9 2-2 2A16 16 0 0 1 3 5c0-1.1.9-2 2-2Z"/></svg> LLAMADA</button></div>
+          <div class="conversation-header"><div class="assistant-avatar">PG<span></span></div><div><strong>Recepción Paco González</strong><small id="channel-subtitle">Vista previa de conversación · sin envío real</small></div><span class="connection-mark" aria-hidden="true">•••</span></div>
+          <div class="call-display" id="call-display" hidden><span class="call-symbol" aria-hidden="true">◖))</span><div><strong>Llamada simulada</strong><small>No se marca ningún número. Puedes activar la lectura en voz alta.</small></div><button type="button" id="voice-toggle" aria-pressed="false">ACTIVAR VOZ</button></div>
+          <div class="messages" id="messages" role="log" aria-label="Conversación de demostración" aria-live="polite" aria-relevant="additions"><div class="message assistant"><span class="message-label">ASISTENTE · DEMO</span><p>Hola, soy la recepción de demostración del Centro de Fisioterapia y Entrenamiento Paco González. ¿Quieres consultar una cita de ejemplo o ver cómo se anula?</p></div></div>
+          <form class="composer" id="message-form"><label class="visually-hidden" for="demo-input">Mensaje para la simulación</label><input id="demo-input" type="text" maxlength="160" autocomplete="off" placeholder="Escribe: quiero una cita, anular, recordatorio…" required><button type="submit" aria-label="Enviar mensaje de prueba"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 12 18-9-4 18-5-7-9-2Zm9 2 9-11"/></svg></button></form>
+          <div class="quick-actions" id="quick-actions" aria-label="Opciones de respuesta"></div>
+          <div class="demo-controls"><button type="button" id="restart-demo" class="text-button">↺ &nbsp;REINICIAR DEMO</button><span>Sin datos personales · Sin conexión a agenda real</span></div>
+        </div>
+        <aside class="demo-sidebar" aria-label="Agenda de demostración">
+          <div class="sidebar-title"><span>AGENDA / DEMO</span><span class="faux-live">FICTICIA</span></div>
+          <div class="agenda-date" id="agenda-date"></div>
+          <div class="agenda-content" id="agenda-content"></div>
+          <div class="agenda-summary"><span>CITAS DE PRUEBA</span><strong id="booking-count">00</strong></div>
+          <div class="timeline"><h3>¿QUÉ PUEDES PROBAR?</h3><ol><li><span>01</span> Elegir el canal</li><li><span>02</span> Consultar horarios ficticios</li><li><span>03</span> Reservar y confirmar</li><li><span>04</span> Ver recordatorio simulado</li><li><span>05</span> Cancelar la cita</li></ol></div>
+        </aside>
+      </div>
+      <div class="demo-next"><span class="tag">SIGUIENTE NIVEL</span><p>Para convertir esta experiencia en un asistente real, primero hay que conocer la agenda o programa que utiliza el centro, sus reglas de cita y los canales autorizados. Esta demo no presume ninguna integración.</p></div>
+    </section>
+
+    <section class="contact section-pad" id="contacto" aria-labelledby="contact-title"><div class="contact-graphic" aria-hidden="true"><span>PG</span><i></i></div><div class="contact-copy"><div class="section-index"><span>04</span> EL CENTRO</div><h2 id="contact-title">NOS VEMOS<br>EN <em>MOVIMIENTO.</em></h2><p>Centro de Fisioterapia y Entrenamiento Paco González</p><address>Calle Alemania 7<br>04740 Roquetas de Mar, Almería</address><div class="contact-links"><a href="tel:+34695287999">695 287 999 <span aria-hidden="true">↗</span></a><a href="https://www.instagram.com/pacogonzalezfisio/" target="_blank" rel="noopener noreferrer">@pacogonzalezfisio <span aria-hidden="true">↗</span></a></div></div></section>
+  </main>
+  <footer><span>© DEMO CONCEPTUAL · PACO GONZÁLEZ</span><span>EL MOVIMIENTO CONTINÚA <span aria-hidden="true">↗</span></span></footer>
+</body>
+</html>
