@@ -1,15 +1,10 @@
 (function () {
   'use strict';
 
-  const services = [
-    'Fisioterapia avanzada',
-    'Entrenamiento personal',
-    'Entrenamiento en grupos',
-    'Readaptación de lesiones'
-  ];
+  const bookingService = 'Fisioterapia';
   const times = ['09:30', '12:00', '17:00', '19:30'];
   const dates = nextWeekdays(5);
-  const state = { channel: 'whatsapp', phase: 'start', service: null, date: dates[0], time: null, booking: null, voice: false };
+  const state = { channel: 'whatsapp', phase: 'start', service: bookingService, date: dates[0], time: null, booking: null, voice: false };
   let demoSequence = 1;
   let skipNextChoice = false;
 
@@ -90,7 +85,7 @@
 
   function explainDemo() {
     userChoice('¿Qué puede hacer?');
-    addMessage('assistant', 'Aquí puedes probar un recorrido guiado: consultar horarios ficticios, reservar una cita de prueba, ver una confirmación, simular un recordatorio y anularla. El canal de llamada también puede leer mis respuestas en voz alta si lo activas. No es una IA conectada al centro.');
+    addMessage('assistant', 'Aquí puedes probar un recorrido guiado para citas de fisioterapia: consultar horarios ficticios, reservar, ver una confirmación, simular un recordatorio y anular. El canal de llamada también puede leer mis respuestas en voz alta si lo activas. No es una IA conectada al centro.');
     if (state.booking) showBookedActions(); else showStart();
   }
 
@@ -101,19 +96,13 @@
       return;
     }
     userChoice('Quiero consultar una cita de ejemplo');
-    state.phase = 'service';
-    addMessage('assistant', 'Claro. ¿Para cuál de estos servicios quieres ver una cita de demostración? Las opciones son los servicios comunicados por el centro; los horarios de esta prueba son inventados.');
-    setActions(services.map(function (name) {
-      return { label: name, action: function () { chooseService(name); } };
-    }));
+    state.time = null;
+    addMessage('assistant', 'Claro. Esta agenda de prueba gestiona solo citas de fisioterapia, como ha indicado el centro. ¿Qué día ficticio quieres consultar?');
+    showDateChoices();
   }
 
-  function chooseService(name) {
+  function showDateChoices() {
     state.phase = 'date';
-    state.service = name;
-    state.time = null;
-    userChoice(name);
-    addMessage('assistant', 'Perfecto. ¿Qué día quieres consultar en la agenda ficticia?');
     const options = dates.map(function (date) {
       return { label: formatDate(date, { weekday: 'short', day: 'numeric', month: 'short' }), action: function () { chooseDate(date); } };
     });
@@ -125,14 +114,14 @@
     state.phase = 'time';
     state.date = date;
     userChoice(formatDate(date, { weekday: 'long', day: 'numeric', month: 'long' }));
-    addMessage('assistant', 'Para ' + state.service.toLowerCase() + ', esta agenda de prueba propone estos horarios ficticios. No representan disponibilidad del centro. ¿Cuál prefieres?');
+    addMessage('assistant', 'Para fisioterapia, esta agenda de prueba propone estos horarios ficticios. No representan disponibilidad del centro ni asignan un profesional real. ¿Cuál prefieres?');
     renderAgenda();
     const options = times.filter(function (time) {
       return !state.booking || state.booking.dateKey !== dateKey(date) || state.booking.time !== time;
     }).map(function (time) {
       return { label: time, action: function () { chooseTime(time); } };
     });
-    options.push({ label: 'Elegir otro día', action: function () { chooseService(state.service); } });
+    options.push({ label: 'Elegir otro día', action: function () { addMessage('assistant', 'Por supuesto. ¿Qué otro día quieres consultar?'); showDateChoices(); } });
     setActions(options);
   }
 
@@ -277,16 +266,7 @@
     skipNextChoice = true;
     let action = null;
 
-    if (state.phase === 'service') {
-      const chosen = services.find(function (service) {
-        const key = normalize(service);
-        return value.includes(key) || (key.includes('fisioterapia') && value.includes('fisio')) ||
-          (key.includes('personal') && value.includes('personal')) ||
-          (key.includes('grupos') && value.includes('grupo')) ||
-          (key.includes('readaptacion') && (value.includes('readapta') || value.includes('lesion')));
-      });
-      if (chosen) action = function () { chooseService(chosen); };
-    } else if (state.phase === 'date') {
+    if (state.phase === 'date') {
       let selected = null;
       if (/^[1-5]$/.test(value)) selected = dates[Number(value) - 1];
       if (!selected) selected = dates.find(function (date) {
@@ -320,7 +300,7 @@
   function restartDemo() {
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     state.booking = null;
-    state.service = null;
+    state.service = bookingService;
     state.time = null;
     state.date = dates[0];
     demoSequence = 1;

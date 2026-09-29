@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#14211e">
   <meta name="description" content="Demostración interactiva para el Centro de Fisioterapia y Entrenamiento Paco González: atención, reservas y recordatorios simulados.">
+  <meta name="robots" content="noindex, nofollow">
   <title>Paco González · Fisioterapia, entrenamiento y una nueva forma de atender</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,9 +23,10 @@
       <span class="brand-copy"><strong>PACO<br>GONZÁLEZ</strong><small>FISIOTERAPIA + ENTRENAMIENTO</small></span>
     </a>
     <nav aria-label="Navegación principal">
-      <a href="#enfoque">El centro</a>
-      <a href="#servicios">Qué hacemos</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#equipo">Equipo</a>
       <a href="#demo">Probar asistente</a>
+      <a href="#contacto">Contacto</a>
     </nav>
     <a class="header-cta" href="#demo">PROBAR DEMO <span aria-hidden="true">↗</span></a>
   </header>
@@ -71,10 +73,22 @@
       <p class="service-footnote">Servicios basados en la información facilitada para esta demostración. El contenido definitivo se revisará con el centro.</p>
     </section>
 
+    <section class="team-proof section-pad" id="equipo" aria-labelledby="team-title">
+      <div class="section-index"><span>03</span> EL EQUIPO</div>
+      <div class="team-proof-layout">
+        <div class="team-proof-copy"><p class="kicker">PERSONAS DETRÁS DE CADA CITA</p><h2 id="team-title">CINCO<br>FISIOTERAPEUTAS.<br><em>UN CENTRO.</em></h2><p>Un equipo de cinco fisioterapeutas en Roquetas de Mar. Contacta con el centro para consultar la atención que necesitas y las citas disponibles.</p><a class="editorial-link" href="#contacto">CONTACTAR CON EL CENTRO <span aria-hidden="true">↗</span></a></div>
+        <div class="team-proof-art" aria-hidden="true"><span class="team-five">05</span><div class="team-bars"><i></i><i></i><i></i><i></i><i></i></div><span class="team-art-label">FISIOTERAPEUTAS / CENTRO PACO GONZÁLEZ</span></div>
+      </div>
+    </section>
+
+    <section class="groups-feature section-pad" id="grupos" aria-labelledby="groups-title"><div class="groups-copy"><div class="section-index"><span>04</span> EN GRUPO</div><p class="kicker">EL CENTRO TAMBIÉN SE MUEVE EN EQUIPO</p><h2 id="groups-title">EL MOVIMIENTO<br><em>SE COMPARTE.</em></h2><p>Además del entrenamiento personal, el centro promociona grupos de entrenamiento. Si te interesa participar, consulta directamente los horarios y las plazas disponibles.</p><a class="button button-dark" href="https://www.instagram.com/pacogonzalezfisio/" target="_blank" rel="noopener noreferrer">PREGUNTAR POR LOS GRUPOS <span aria-hidden="true">↗</span></a></div><div class="groups-art" aria-hidden="true"><span class="groups-word">EN<br>GRUPO</span><div class="groups-rings"><i></i><i></i><i></i></div><span class="groups-arrow">↗</span></div></section>
+
+    <section class="start-section section-pad" id="empezar" aria-labelledby="start-title"><div class="section-index"><span>05</span> CÓMO EMPEZAR</div><div class="start-head"><h2 id="start-title">TU PRÓXIMO PASO<br><em>EMPIEZA AQUÍ.</em></h2><p>Sin formularios interminables ni respuestas a ciegas. Estas son las vías para consultar con el centro hoy.</p></div><div class="start-steps"><div><span>01</span><h3>ELIGE TU CAMINO</h3><p>Fisioterapia, readaptación o entrenamiento. Si tienes dudas, explícalas al equipo.</p></div><div><span>02</span><h3>CONTACTA</h3><p>Llama al número del centro o escríbele a su perfil de Instagram para consultar cómo empezar.</p></div><div><span>03</span><h3>ACUERDA TU CITA</h3><p>Confirma los detalles directamente con el centro. La agenda interactiva de esta web es solo una demostración.</p></div></div><a class="editorial-link" href="tel:+34695287999">LLAMAR AL CENTRO <span aria-hidden="true">↗</span></a></section>
+
     <section class="transition-band" aria-label="Presentación de la demostración"><div class="marquee-track" aria-hidden="true"><span>MENOS ESPERAS <b>✳</b> MÁS MOVIMIENTO <b>✳</b> MENOS ESPERAS <b>✳</b> MÁS MOVIMIENTO <b>✳</b></span><span>MENOS ESPERAS <b>✳</b> MÁS MOVIMIENTO <b>✳</b> MENOS ESPERAS <b>✳</b> MÁS MOVIMIENTO <b>✳</b></span></div></section>
 
     <section class="demo-section section-pad" id="demo" aria-labelledby="demo-title">
-      <div class="demo-heading"><div><div class="section-index"><span>03</span> PRUÉBALO TÚ MISMO</div><h2 id="demo-title">UNA SECRETARÍA<br>QUE <em>RESPONDE.</em></h2></div><p>Entra como paciente de prueba. Consulta huecos de una agenda ficticia, reserva, recibe un recordatorio simulado y cancela. Todo ocurre aquí, sin tocar el centro real.</p></div>
+      <div class="demo-heading"><div><div class="section-index"><span>06</span> PRUÉBALO TÚ MISMO</div><h2 id="demo-title">UNA SECRETARÍA<br>QUE <em>RESPONDE.</em></h2></div><p>Prueba el recorrido de una cita de fisioterapia: consulta una agenda ficticia, reserva, ve el recordatorio simulado y cancela. Ni el Google Calendar del centro ni sus pacientes reales se tocan aquí.</p></div>
       <div class="safety-note" role="note"><span class="safety-icon" aria-hidden="true">i</span><p><strong>Entorno de demostración.</strong> Las fechas y horas son ejemplos inventados. No se hacen llamadas, no se envía WhatsApp y no se crean citas reales. No introduzcas datos personales o de salud.</p></div>
       <div class="demo-shell">
         <div class="demo-main">
@@ -88,17 +102,19 @@
           <div class="demo-controls"><button type="button" id="restart-demo" class="text-button">↺ &nbsp;REINICIAR DEMO</button><span>Sin datos personales · Sin conexión a agenda real</span></div>
         </div>
         <aside class="demo-sidebar" aria-label="Agenda de demostración">
-          <div class="sidebar-title"><span>AGENDA / DEMO</span><span class="faux-live">FICTICIA</span></div>
+          <div class="sidebar-title"><span>FISIOTERAPIA / DEMO</span><span class="faux-live">FICTICIA</span></div>
           <div class="agenda-date" id="agenda-date"></div>
           <div class="agenda-content" id="agenda-content"></div>
           <div class="agenda-summary"><span>CITAS DE PRUEBA</span><strong id="booking-count">00</strong></div>
           <div class="timeline"><h3>¿QUÉ PUEDES PROBAR?</h3><ol><li><span>01</span> Elegir el canal</li><li><span>02</span> Consultar horarios ficticios</li><li><span>03</span> Reservar y confirmar</li><li><span>04</span> Ver recordatorio simulado</li><li><span>05</span> Cancelar la cita</li></ol></div>
         </aside>
       </div>
-      <div class="demo-next"><span class="tag">SIGUIENTE NIVEL</span><p>Para convertir esta experiencia en un asistente real, primero hay que conocer la agenda o programa que utiliza el centro, sus reglas de cita y los canales autorizados. Esta demo no presume ninguna integración.</p></div>
+      <div class="demo-next"><span class="tag">SIGUIENTE NIVEL</span><p>Para convertir esta experiencia en un asistente real, primero hay que confirmar cómo se reparten los Google Calendars de los cinco fisioterapeutas, las reglas de cita y los canales autorizados. Esta demo no está integrada con ellos.</p></div>
     </section>
 
-    <section class="contact section-pad" id="contacto" aria-labelledby="contact-title"><div class="contact-graphic" aria-hidden="true"><span>PG</span><i></i></div><div class="contact-copy"><div class="section-index"><span>04</span> EL CENTRO</div><h2 id="contact-title">NOS VEMOS<br>EN <em>MOVIMIENTO.</em></h2><p>Centro de Fisioterapia y Entrenamiento Paco González</p><address>Calle Alemania 7<br>04740 Roquetas de Mar, Almería</address><div class="contact-links"><a href="tel:+34695287999">695 287 999 <span aria-hidden="true">↗</span></a><a href="https://www.instagram.com/pacogonzalezfisio/" target="_blank" rel="noopener noreferrer">@pacogonzalezfisio <span aria-hidden="true">↗</span></a></div></div></section>
+    <section class="faq-section section-pad" id="dudas" aria-labelledby="faq-title"><div class="faq-intro"><div class="section-index"><span>07</span> DUDAS FRECUENTES</div><h2 id="faq-title">ANTES DE<br><em>DAR EL PASO.</em></h2><p>Información útil para orientarte, sin sustituir lo que te confirme directamente el centro.</p></div><div class="faq-list"><details><summary>¿Qué servicios comunica el centro?<span aria-hidden="true">+</span></summary><p>Fisioterapia avanzada, entrenamiento personal, entrenamiento en grupos y readaptación de lesiones. Para saber qué opción encaja contigo, consulta directamente con el equipo.</p></details><details><summary>¿Hay grupos de entrenamiento?<span aria-hidden="true">+</span></summary><p>Sí, el centro los promociona. Sus horarios, plazas y condiciones deben confirmarse directamente con Paco González.</p></details><details><summary>¿Cómo puedo pedir una cita real?<span aria-hidden="true">+</span></summary><p>Contacta con el centro en el 695 287 999. La reserva que puedes probar en esta página es ficticia y no llega a su agenda.</p></details><details><summary>¿La demo también reserva entrenamiento?<span aria-hidden="true">+</span></summary><p>No. Paco ha indicado que la primera fase del asistente debe centrarse únicamente en citas de fisioterapia. Los servicios de entrenamiento siguen presentes en la web, pero no en la agenda de prueba.</p></details></div></section>
+
+    <section class="contact section-pad" id="contacto" aria-labelledby="contact-title"><div class="contact-graphic" aria-hidden="true"><span>PG</span><i></i></div><div class="contact-copy"><div class="section-index"><span>08</span> EL CENTRO</div><h2 id="contact-title">NOS VEMOS<br>EN <em>MOVIMIENTO.</em></h2><p>Centro de Fisioterapia y Entrenamiento Paco González</p><address>Calle Alemania 7<br>04740 Roquetas de Mar, Almería</address><div class="contact-links"><a href="tel:+34695287999">695 287 999 <span aria-hidden="true">↗</span></a><a href="https://www.instagram.com/pacogonzalezfisio/" target="_blank" rel="noopener noreferrer">@pacogonzalezfisio <span aria-hidden="true">↗</span></a><a href="https://www.google.com/maps/search/?api=1&amp;query=Calle+Alemania+7%2C+04740+Roquetas+de+Mar%2C+Almeria" target="_blank" rel="noopener noreferrer">CÓMO LLEGAR <span aria-hidden="true">↗</span></a></div></div></section>
   </main>
   <footer><span>© DEMO CONCEPTUAL · PACO GONZÁLEZ</span><span>EL MOVIMIENTO CONTINÚA <span aria-hidden="true">↗</span></span></footer>
 </body>

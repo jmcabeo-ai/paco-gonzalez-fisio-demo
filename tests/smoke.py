@@ -25,7 +25,8 @@ def run() -> None:
             assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), f'{name}: horizontal overflow'
             page.locator('#demo').scroll_into_view_if_needed()
             page.get_by_role('button', name='Buscar cita de ejemplo').click()
-            page.get_by_role('button', name='Fisioterapia avanzada').click()
+            assert 'solo citas de fisioterapia' in page.locator('#messages').inner_text()
+            assert page.get_by_role('button', name='Entrenamiento personal').count() == 0
             page.locator('.quick-actions button').first.click()
             page.get_by_role('button', name='09:30').click()
             page.get_by_role('button', name='Confirmar cita de prueba').click()
@@ -39,13 +40,20 @@ def run() -> None:
             page.get_by_role('button', name='Sí, anular cita de prueba').click()
             assert page.locator('#booking-count').inner_text() == '00'
             assert 'CITA DE DEMOSTRACIÓN ANULADA' in page.locator('#messages').inner_text()
-            for typed in ['quiero una cita', 'entrenamiento personal', '1', '12:00', 'sí']:
+            for typed in ['quiero una cita', '1', '12:00', 'sí']:
                 page.locator('#demo-input').fill(typed)
                 page.get_by_role('button', name='Enviar mensaje de prueba').click()
             assert page.locator('#booking-count').inner_text() == '01'
             assert 'PG-DEMO-002' in page.locator('#messages').inner_text()
             page.screenshot(path=str(SHOTS / f'{name}-demo.png'), full_page=True)
             assert not errors, f'{name}: JavaScript errors: {errors}'
+            page.close()
+        for width in (375, 768, 1024):
+            page = browser.new_page(viewport={'width': width, 'height': 850})
+            page.goto(URL)
+            assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), f'{width}: horizontal overflow'
+            page.locator('.faq-list details').first.locator('summary').click()
+            assert page.locator('.faq-list details').first.get_attribute('open') is not None
             page.close()
         browser.close()
 
