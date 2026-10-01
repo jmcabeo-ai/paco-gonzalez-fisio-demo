@@ -23,6 +23,9 @@ def run() -> None:
             page.screenshot(path=str(SHOTS / f'{name}-hero.png'), full_page=True)
             assert page.locator('h1').is_visible()
             assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), f'{name}: horizontal overflow'
+            assert page.locator('.opportunity-card').count() == 4
+            assert 'no funciones activas' in page.locator('#oportunidades').inner_text()
+            page.locator('#oportunidades').screenshot(path=str(SHOTS / f'{name}-oportunidades.png'))
             page.locator('#demo').scroll_into_view_if_needed()
             page.get_by_role('button', name='Buscar cita de ejemplo').click()
             assert 'solo citas de fisioterapia' in page.locator('#messages').inner_text()
