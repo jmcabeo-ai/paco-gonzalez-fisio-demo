@@ -4,7 +4,7 @@
   // Proposed OMNIA commercial tariffs, not provider prices or an active subscription.
   const pricing = {
     setup: 997, standaloneBase: 1370, standaloneAgents: 690,
-    whatsapp: 29, growth: 67, textOverage: 0.30, voiceOverage: 0.27,
+    growth: 67, textOverage: 0.30, voiceOverage: 0.27,
     days: 22, growthText: 400,
     voiceBundles: {
       none: { minutes: 0, price: 0 },
@@ -20,19 +20,18 @@
   };
   const radios = Array.from(document.querySelectorAll('[name="service-plan"]'));
   const bundleRadios = Array.from(document.querySelectorAll('[name="voice-bundle"]'));
-  const whatsapp = document.getElementById('extra-whatsapp');
   const growth = document.getElementById('extra-growth');
   const daily = document.getElementById('daily-contacts');
   const share = document.getElementById('voice-share');
   const duration = document.getElementById('call-duration');
-  if (!radios.length || !bundleRadios.length || !whatsapp || !growth || !daily || !share || !duration) return;
+  if (!radios.length || !bundleRadios.length || !growth || !daily || !share || !duration) return;
 
   const params = new URLSearchParams(window.location.search);
   const requestedPlan = params.get('plan');
   if (Object.prototype.hasOwnProperty.call(pricing.plans, requestedPlan)) {
     radios.forEach(function (input) { input.checked = input.value === requestedPlan; });
   }
-  if (params.has('wa')) whatsapp.checked = params.get('wa') === '1';
+  // Old wa=0/1 links remain valid; WhatsApp is now included in every plan.
   if (params.has('growth')) growth.checked = params.get('growth') === '1';
   const requestedBundle = params.get('bundle');
   if (Object.prototype.hasOwnProperty.call(pricing.voiceBundles, requestedBundle)) {
@@ -67,7 +66,7 @@
     const extraText = plan.ai ? Math.max(0, text - textLimit) : 0;
     const extraVoice = plan.ai ? Math.max(0, minutes - voiceLimit) : 0;
     const overage = Math.round((extraText * pricing.textOverage + extraVoice * pricing.voiceOverage) * 100) / 100;
-    const monthly = plan.price + (whatsapp.checked ? pricing.whatsapp : 0) + (growth.checked ? pricing.growth : 0) + bundle.price;
+    const monthly = plan.price + (growth.checked ? pricing.growth : 0) + bundle.price;
     return { key: key, plan: plan, bundleKey: bundleKey, bundle: bundle, text: text, minutes: minutes, textLimit: textLimit, voiceLimit: voiceLimit, extraText: extraText, extraVoice: extraVoice, overage: overage, monthly: monthly };
   }
 
@@ -76,7 +75,6 @@
     const url = new URL(window.location.href);
     url.search = '';
     url.searchParams.set('plan', selected.key);
-    url.searchParams.set('wa', whatsapp.checked ? '1' : '0');
     url.searchParams.set('growth', growth.checked ? '1' : '0');
     url.searchParams.set('bundle', selected.bundleKey);
     url.searchParams.set('daily', daily.value);
@@ -125,7 +123,7 @@
     append('p', 'Tarifas propuestas por separado, no un precio anterior: web 790 €' + (selected.plan.ai ? ' + agentes texto/voz 690 €' : '') + ' + agenda y automatizaciones 390 € + configuración CRM 190 € = ' + euro(standalone) + '. Paquete 997 €; diferencia ' + euro(standalone - pricing.setup) + '. Activación según plan.');
     append('p', 'Bonus incluidos: formación de 90 min y guía de uso; una revisión a los 30 días; QR/enlaces y plantilla de solicitud de reseñas. Pago: 50 % al inicio y 50 % al validar la entrega.');
     append('h2', selected.plan.name + ': ' + euro(selected.monthly) + '/mes');
-    append('p', 'Plan ' + euro(selected.plan.price) + '/mes' + (whatsapp.checked ? ' + WhatsApp 29 €/mes' : '') + (growth.checked ? ' + Crecimiento 67 €/mes' : '') + (selected.bundle.minutes ? ' + bono de voz ' + number(selected.bundle.minutes) + ' min: ' + euro(selected.bundle.price) + '/mes' : '') + '.');
+    append('p', 'Plan ' + euro(selected.plan.price) + '/mes, canal WhatsApp incluido (un número, sin suplemento fijo)' + (growth.checked ? ' + Crecimiento 67 €/mes' : '') + (selected.bundle.minutes ? ' + bono de voz ' + number(selected.bundle.minutes) + ' min: ' + euro(selected.bundle.price) + '/mes' : '') + '.');
     append('p', selected.plan.ai ? 'Incluye ' + number(selected.textLimit) + ' conversaciones de texto y ' + number(selected.voiceLimit) + ' minutos IA de voz al mes. ' + (selected.plan.phone ? 'Atención telefónica entrante y voz web.' : 'Voz web; atención telefónica no incluida.') : 'Atención humana desde el CRM. Agentes IA sin activar.');
     append('p', bundleSelection(selected));
     append('p', 'Alojamiento, CRM, mantenimiento, supervisión de los circuitos incluidos y soporte en días laborables. Ajustes menores: 30 min/mes en Esencial y Digital; 60 min/mes en Completa. Completa incluye revisión mensual de 30 min. Crecimiento añade tres circuitos: reseñas, lista de espera y seguimiento autorizado, más revisión de 30 min/mes. Si ya tienes la revisión de Completa, se amplía a 60 min; no se duplica.');
@@ -137,6 +135,16 @@
     if (selected.overage) append('p', 'Desglose del exceso estimado: ' + overageDetails(selected) + '. Total: ' + euro(selected.overage) + '/mes.');
     append('p', 'Ampliación Crecimiento: +' + euro(pricing.growth) + '/mes (' + (growth.checked ? 'incluida en la cuota seleccionada' : 'opcional, no incluida en la cuota seleccionada') + '). ' + growthCapacity(selected) + ' No es un bono de pago único.');
     append('p', 'Bonos mensuales de voz opcionales, además del cupo del plan: ' + Object.keys(pricing.voiceBundles).filter(function (key) { return key !== 'none'; }).map(function (key) { const bundle = pricing.voiceBundles[key]; return number(bundle.minutes) + ' min por ' + euro(bundle.price) + '/mes (' + euro(bundle.price / bundle.minutes) + '/min)'; }).join('; ') + '. Un único bono al mes; se factura completo aunque uses menos, sin acumulación de saldo. No incluye texto ni activa nuevos canales. Solo en Digital y Completa.');
+    append('h2', 'WhatsApp incluido: mensajes y plantillas');
+    const meta = document.getElementById('whatsapp-costes');
+    append('p', meta.querySelector('.meta-intro').textContent);
+    const metaTable = meta.querySelector('table').cloneNode(true);
+    metaTable.className = 'print-meta-table';
+    root.append(metaTable);
+    ['.meta-policy', '.meta-examples p', '.meta-templates p', '.meta-billing', '.meta-separation'].forEach(function (selector) { append('p', meta.querySelector(selector).textContent); });
+    append('p', 'Plantillas básicas preparadas dentro de la puesta en marcha, sujetas a aprobación de Meta. Canal incluido en la cuota; atención humana en Esencial e IA según cupos en Digital/Completa. Activación tras validar titularidad y requisitos.');
+    meta.querySelectorAll('.meta-sources a').forEach(function (source) { append('p', source.textContent + ' ' + source.href, 'print-contact'); });
+    append('p', 'Tarifas comprobadas el 01/10/2026, sujetas a cambios del proveedor.');
     append('h2', 'Condiciones y siguiente paso');
     append('p', 'Impuestos, Meta/WhatsApp, SMS, correo, número y tráfico telefónico aparte según consumo. Renovación del dominio aparte. Cupos OMNIA: sesión de texto de 24 h por contacto/canal, hasta 20 respuestas IA; voz web y teléfono comparten minutos. Aviso previsto al 80 % y pausa/derivación al alcanzar el límite sin autorización.');
     append('p', 'Renovación mensual; baja con 30 días de preaviso. Cuota desde puesta en servicio. Alcance y controles pendientes de validación técnica; integraciones especiales y nuevos desarrollos se presupuestan aparte. La web alojada permanece publicada mientras el servicio esté activo; migración independiente aparte. Esta simulación no contrata ni activa servicios.');
@@ -174,7 +182,6 @@
     setText('estimated-minutes', number(selected.minutes));
     setText('quote-plan-name', selected.plan.name);
     setText('quote-base', euro(selected.plan.price) + '/mes');
-    document.getElementById('quote-whatsapp-line').hidden = !whatsapp.checked;
     document.getElementById('quote-growth-line').hidden = !growth.checked;
     document.getElementById('quote-bundle-line').hidden = !selected.bundle.minutes;
     setText('quote-bundle-name', 'Bono voz · ' + number(selected.bundle.minutes) + ' min');
@@ -205,12 +212,12 @@
     }
     setText('usage-fit', fit);
     document.getElementById('usage-fit').classList.toggle('needs-capacity', Boolean(selected.overage) || !selected.plan.ai);
-    const body = 'Hola, Jonathan. He probado la demo del Centro Paco González y quiero revisar esta propuesta:\n\nPuesta en marcha: 997 €.\nPlan: ' + selected.plan.name + '.\nWhatsApp: ' + (whatsapp.checked ? 'sí' : 'no') + '.\nCrecimiento: ' + (growth.checked ? 'sí' : 'no') + '.\nBono de voz: ' + (selected.bundle.minutes ? number(selected.bundle.minutes) + ' min por ' + euro(selected.bundle.price) + '/mes' : 'sin bono') + '.\nCuota: ' + euro(selected.monthly) + '/mes, antes de impuestos y consumos.\nExceso IA estimado autorizado: ' + euro(selected.overage) + '/mes.\n\nMi selección: ' + selectionURL();
+    const body = 'Hola, Jonathan. He probado la demo del Centro Paco González y quiero revisar esta propuesta:\n\nPuesta en marcha: 997 €.\nPlan: ' + selected.plan.name + '.\nWhatsApp: canal incluido en la cuota; mensajes Meta y procesamiento por consumo aparte.\nCrecimiento: ' + (growth.checked ? 'sí' : 'no') + '.\nBono de voz: ' + (selected.bundle.minutes ? number(selected.bundle.minutes) + ' min por ' + euro(selected.bundle.price) + '/mes' : 'sin bono') + '.\nCuota: ' + euro(selected.monthly) + '/mes, antes de impuestos y consumos.\nExceso IA estimado autorizado: ' + euro(selected.overage) + '/mes.\n\nMi selección: ' + selectionURL();
     document.getElementById('proposal-contact').href = 'mailto:jonathan@omniagsistems.com?subject=' + encodeURIComponent('Propuesta Paco González · ' + selected.plan.name) + '&body=' + encodeURIComponent(body);
     setText('proposal-feedback', '');
     makePrintDocument(selected);
   }
-  radios.concat(bundleRadios, [whatsapp, growth]).forEach(function (control) { control.addEventListener('change', updateQuote); });
+  radios.concat(bundleRadios, [growth]).forEach(function (control) { control.addEventListener('change', updateQuote); });
   document.getElementById('add-growth-capacity').addEventListener('click', function () { growth.checked = !growth.checked; updateQuote(); });
   [daily, share, duration].forEach(function (control) { control.addEventListener('input', updateQuote); });
   document.getElementById('print-proposal').addEventListener('click', function () { makePrintDocument(selection()); window.print(); });
