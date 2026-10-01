@@ -50,8 +50,21 @@
     messages.scrollTop = messages.scrollHeight;
     if (kind === 'assistant' && state.channel === 'call' && state.voice && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
+      const voices = window.speechSynthesis.getVoices();
+      const castilianVoices = voices.filter(function (voice) {
+        return voice.lang.replace('_', '-').toLowerCase() === 'es-es';
+      });
+      const castilianVoice = castilianVoices.find(function (voice) { return voice.localService; }) || castilianVoices[0];
+      if (!castilianVoice) {
+        state.voice = false;
+        voiceToggle.textContent = 'ACTIVAR VOZ';
+        voiceToggle.setAttribute('aria-pressed', 'false');
+        addMessage('system', 'Este dispositivo no ofrece una voz castellana para la simulación. Puedes seguir con los botones o probar la IA de voz del bloque anterior.');
+        return;
+      }
       const utterance = new SpeechSynthesisUtterance(copy);
       utterance.lang = 'es-ES';
+      utterance.voice = castilianVoice;
       utterance.rate = 1.02;
       window.speechSynthesis.speak(utterance);
     }
