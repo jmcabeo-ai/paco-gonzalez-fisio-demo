@@ -43,6 +43,14 @@ def run():
             assert amount(page, '#quote-year-total') == '4909 €'
             assert page.locator('#estimated-conversations').inner_text() == '220'
             assert page.locator('#estimated-minutes').inner_text() == '660'
+            assert page.locator('#consumo').is_visible()
+            assert page.locator('.overage-card').count() == 3
+            assert amount(page, '#voice-unit-price') == '0,35 €'
+            assert amount(page, '#text-unit-price') == '0,30 €'
+            assert amount(page, '#growth-unit-price') == '+67 €'
+            assert page.locator('.usage-terms').get_attribute('open') is None
+            assert '60 min extra × 0,35 € = 21 €' in page.locator('#quote-overage-detail').inner_text().replace('\xa0', ' ')
+            assert '0,35' in page.locator('#quote-rates').inner_text()
             for key, base in [('essential', 97), ('digital', 197), ('complete', 297)]:
                 page.locator(f'[name="service-plan"][value="{key}"]').check()
                 for wa in (False, True):
@@ -52,31 +60,50 @@ def run():
                         expected = base + (29 if wa else 0) + (67 if growth else 0)
                         assert amount(page, '#quote-monthly') == str(expected), (width, key, wa, growth)
                         assert amount(page, '#quote-year-total') == f'{997 + expected * 12} €'
+                        assert page.locator('#add-growth-capacity').get_attribute('aria-pressed') == str(growth).lower()
                 if key == 'essential':
                     assert page.locator('#value-agent-line').is_hidden()
                     assert amount(page, '#standalone-total') == '1370 €'
                     assert amount(page, '#bundle-saving').startswith('373 €')
                     assert 'atención humana' in page.locator('#usage-fit').inner_text()
+                    assert page.locator('#quote-unit-rates').is_hidden()
+                    assert page.locator('#quote-overage-detail').is_hidden()
+                    assert page.locator('#add-growth-capacity').is_hidden()
+                    assert 'no activa agentes ni cupos IA' in page.locator('#growth-capacity').inner_text()
                 else:
                     assert page.locator('#value-agent-line').is_visible()
                     assert amount(page, '#standalone-total') == '2060 €'
                     assert amount(page, '#bundle-saving').startswith('1063 €')
+                    assert page.locator('#quote-unit-rates').is_visible()
+                    assert page.locator('#add-growth-capacity').is_visible()
+                    assert '+400 minutos IA y +400 conversaciones' in page.locator('#growth-capacity').inner_text()
             page.locator('#extra-whatsapp').uncheck()
             page.locator('#extra-growth').uncheck()
             set_range(page, '#daily-contacts', 60)
             set_range(page, '#voice-share', 0)
             assert amount(page, '#quote-estimated').startswith('513 ')
+            assert '720 conversaciones extra × 0,30 € = 216 €' in page.locator('#quote-overage-detail').inner_text().replace('\xa0', ' ')
             set_range(page, '#voice-share', 100)
             set_range(page, '#call-duration', 1)
             assert amount(page, '#quote-estimated').startswith('549 ')
+            assert '720 min extra × 0,35 € = 252 €' in page.locator('#quote-overage-detail').inner_text().replace('\xa0', ' ')
+            set_range(page, '#voice-share', 50)
+            set_range(page, '#call-duration', 3)
+            assert amount(page, '#quote-estimated').startswith('798 ')
+            assert '1.380 min extra × 0,35 € = 483 €' in page.locator('#quote-overage-detail').inner_text().replace('\xa0', ' ')
+            assert '60 conversaciones extra × 0,30 € = 18 €' in page.locator('#quote-overage-detail').inner_text().replace('\xa0', ' ')
             set_range(page, '#daily-contacts', 20)
             set_range(page, '#voice-share', 50)
             set_range(page, '#call-duration', 3)
             page.locator('#extra-whatsapp').check()
-            page.locator('#extra-growth').check()
+            page.locator('#add-growth-capacity').click()
+            assert page.locator('#extra-growth').is_checked()
             assert amount(page, '#quote-monthly') == '393'
             assert amount(page, '#quote-estimated').startswith('393 ')
-            page.locator('#extra-growth').uncheck()
+            assert page.locator('#quote-overage-detail').is_hidden()
+            assert '1.000 conversaciones y 1.000 minutos' in page.locator('#usage-fit').inner_text()
+            page.locator('#add-growth-capacity').click()
+            assert not page.locator('#extra-growth').is_checked()
             body = parse_qs(urlparse(page.locator('#proposal-contact').get_attribute('href')).query)['body'][0]
             assert '326' in body and 'plan=complete' in body and 'wa=1' in body
             page.locator('#copy-proposal-link').click()
@@ -93,12 +120,17 @@ def run():
             }''')
             assert page.evaluate('''() => [...document.querySelectorAll('a[href^="#"]')].every(a => document.getElementById(a.getAttribute('href').slice(1)))''')
             if width in (390, 1440):
-                for name, selector in [('hero', '#inicio'), ('reviews', '#resenas'), ('protection', '#proteccion'), ('offer', '.offer-value'), ('plans', '.plan-picker'), ('quote', '.quote-summary')]:
+                for name, selector in [('hero', '#inicio'), ('reviews', '#resenas'), ('protection', '#proteccion'), ('offer', '.offer-value'), ('plans', '.plan-picker'), ('consumption', '#consumo'), ('quote', '.quote-summary')]:
                     page.locator(selector).screenshot(path=str(SHOTS / f'{width}-{name}.png'))
                 page.emulate_media(media='print')
                 assert page.locator('#print-proposal-document').is_visible()
                 assert page.locator('#inicio').is_hidden()
                 assert 'Privacidad, seguridad y control' in page.locator('#print-proposal-document').inner_text()
+                printable = page.locator('#print-proposal-document').inner_text().replace('\xa0', ' ')
+                assert 'Tarifas fuera del cupo y ampliación mensual' in printable
+                assert 'Voz IA: 0,35 €/min · Texto IA: 0,30 €/conversación' in printable
+                assert '60 min extra × 0,35 € = 21 €' in printable
+                assert 'Ampliación Crecimiento: +67 €/mes (opcional' in printable
                 page.locator('#print-proposal-document').screenshot(path=str(SHOTS / f'{width}-print.png'))
                 page.emulate_media(media='screen')
             page.locator('#activate-demo').click()
@@ -133,4 +165,4 @@ def run():
 
 if __name__ == '__main__':
     run()
-    print('OK: 5 viewports, 12 combinations, usage scenarios, privacy gate, print, URLs, no JS errors/overflow. External widgets mocked.')
+    print('OK: 5 viewports, 12 combinations, visible overage rates/breakdowns, monthly capacity toggle, usage scenarios, privacy gate, print, URLs, no JS errors/overflow. External widgets mocked.')

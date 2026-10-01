@@ -72,6 +72,21 @@
     return url.href;
   }
 
+  function ratesText() {
+    return 'Voz IA: ' + euro(pricing.voiceOverage) + '/min · Texto IA: ' + euro(pricing.textOverage) + '/conversación';
+  }
+
+  function overageDetails(selected) {
+    const lines = [];
+    if (selected.extraVoice) lines.push(number(selected.extraVoice) + ' min extra × ' + euro(pricing.voiceOverage) + ' = ' + euro(Math.round(selected.extraVoice * pricing.voiceOverage * 100) / 100));
+    if (selected.extraText) lines.push(number(selected.extraText) + ' conversaciones extra × ' + euro(pricing.textOverage) + ' = ' + euro(Math.round(selected.extraText * pricing.textOverage * 100) / 100));
+    return lines.join(' · ');
+  }
+
+  function growthCapacity(selected) {
+    return selected.plan.ai ? '+' + number(pricing.growthVoice) + ' minutos IA y +' + number(pricing.growthText) + ' conversaciones al mes, además de los circuitos y la revisión de Crecimiento. Es la misma ampliación de arriba, no un cargo adicional.' : 'En Esencial añade los tres circuitos y la revisión de Crecimiento, pero no activa agentes ni cupos IA. Los minutos y conversaciones adicionales requieren Digital o Completa.';
+  }
+
   function makePrintDocument(selected) {
     const root = document.getElementById('print-proposal-document');
     root.replaceChildren();
@@ -96,8 +111,12 @@
     append('h2', 'Escenario editable de consumo');
     append('p', number(Number(daily.value)) + ' consultas diarias × 22 días; ' + share.value + ' % por voz, ' + duration.value + ' min de duración. Resultado: ' + number(selected.text) + ' conversaciones de texto y ' + number(selected.minutes) + ' minutos de voz al mes.');
     append('p', selected.plan.ai ? 'Exceso IA estimado: ' + euro(selected.overage) + '/mes, únicamente si se autoriza. Total con ese exceso: ' + euro(selected.monthly + selected.overage) + '/mes, antes de impuestos y consumos de canales.' : 'Este plan no atiende ese volumen por IA; la atención corresponde al equipo.');
+    append('h2', 'Tarifas fuera del cupo y ampliación mensual');
+    append('p', ratesText() + '. Solo exceso autorizado en los planes con IA. Precios antes de impuestos; consumos de canales aparte.' + (!selected.plan.ai ? ' No se aplican a Esencial, que no tiene agentes activos.' : ''));
+    if (selected.overage) append('p', 'Desglose del exceso estimado: ' + overageDetails(selected) + '. Total: ' + euro(selected.overage) + '/mes.');
+    append('p', 'Ampliación Crecimiento: +' + euro(pricing.growth) + '/mes (' + (growth.checked ? 'incluida en la cuota seleccionada' : 'opcional, no incluida en la cuota seleccionada') + '). ' + growthCapacity(selected) + ' No es un bono de pago único.');
     append('h2', 'Condiciones y siguiente paso');
-    append('p', 'Impuestos, Meta/WhatsApp, SMS, correo, número y tráfico telefónico aparte según consumo. Renovación del dominio aparte. Cupos OMNIA: sesión de texto de 24 h por contacto/canal, hasta 20 respuestas IA; voz web y teléfono comparten minutos. Exceso autorizado: 0,30 €/conversación y 0,35 €/minuto IA. Aviso previsto al 80 % y pausa/derivación al alcanzar el límite sin autorización.');
+    append('p', 'Impuestos, Meta/WhatsApp, SMS, correo, número y tráfico telefónico aparte según consumo. Renovación del dominio aparte. Cupos OMNIA: sesión de texto de 24 h por contacto/canal, hasta 20 respuestas IA; voz web y teléfono comparten minutos. Aviso previsto al 80 % y pausa/derivación al alcanzar el límite sin autorización.');
     append('p', 'Renovación mensual; baja con 30 días de preaviso. Cuota desde puesta en servicio. Alcance y controles pendientes de validación técnica; integraciones especiales y nuevos desarrollos se presupuestan aparte. La web alojada permanece publicada mientras el servicio esté activo; migración independiente aparte. Esta simulación no contrata ni activa servicios.');
     append('p', 'Ejemplo de 12 meses sin consumos: ' + euro(pricing.setup + selected.monthly * 12) + '. No implica permanencia anual.');
     append('h2', 'Privacidad, seguridad y control');
@@ -126,6 +145,18 @@
     setText('quote-year-total', euro(pricing.setup + selected.monthly * 12));
     setText('quote-estimated', euro(selected.monthly + selected.overage) + '/mes');
     setText('quote-overage', selected.plan.ai ? (selected.overage ? euro(selected.overage) + ' de exceso IA estimado si lo autorizas, más consumo de los canales.' : 'Tu escenario entra en el cupo IA. Consumo de los canales aparte.') : 'La cuota no incluye agentes IA; el equipo atiende desde el panel. Consumo de los canales aparte.');
+    setText('voice-unit-price', euro(pricing.voiceOverage));
+    setText('text-unit-price', euro(pricing.textOverage));
+    setText('growth-unit-price', '+' + euro(pricing.growth));
+    setText('growth-capacity', growthCapacity(selected));
+    setText('quote-rates', ratesText());
+    document.getElementById('quote-unit-rates').hidden = !selected.plan.ai;
+    setText('quote-overage-detail', overageDetails(selected));
+    document.getElementById('quote-overage-detail').hidden = !selected.overage;
+    const capacityButton = document.getElementById('add-growth-capacity');
+    capacityButton.hidden = !selected.plan.ai;
+    capacityButton.setAttribute('aria-pressed', String(growth.checked));
+    capacityButton.textContent = growth.checked ? 'QUITAR AMPLIACIÓN −' : 'AÑADIR AMPLIACIÓN ↗';
     let fit;
     if (!selected.plan.ai) {
       fit = 'Esencial organiza consultas y avisos con atención humana. Para que un agente atienda por texto o voz, elige Digital o Completa.';
@@ -142,6 +173,7 @@
     makePrintDocument(selected);
   }
   radios.concat([whatsapp, growth]).forEach(function (control) { control.addEventListener('change', updateQuote); });
+  document.getElementById('add-growth-capacity').addEventListener('click', function () { growth.checked = !growth.checked; updateQuote(); });
   [daily, share, duration].forEach(function (control) { control.addEventListener('input', updateQuote); });
   document.getElementById('print-proposal').addEventListener('click', function () { makePrintDocument(selection()); window.print(); });
   document.getElementById('copy-proposal-link').addEventListener('click', async function () {
