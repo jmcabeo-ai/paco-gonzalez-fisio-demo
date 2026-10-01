@@ -1,22 +1,26 @@
 # Demo — Centro de Fisioterapia y Entrenamiento Paco González
 
-Demostración visual e interactiva de una posible web y una recepción virtual de prueba. El chat flotante y el módulo de voz integrado usan una subcuenta y un calendario ficticios de OMNIA; no están conectados al centro.
+Landing conceptual del centro y presentación comercial OMNIA. Incluye servicios, equipo, entrenamiento, reseñas públicas, contacto, asistentes reales en un entorno ficticio, posibles automatizaciones, implantación, privacidad y propuesta interactiva al final.
 
-## Probar localmente
+## Probar
 
-Abre `index.html` en un navegador para usar el recorrido guiado sin servidor. El widget de IA requiere conexión a Internet y se comprueba mejor desde la URL pública. Para la comprobación automatizada del recorrido guiado, ejecuta `python tests/smoke.py` si Playwright está instalado.
+Abrir `index.html` permite usar el configurador sin servidor. Para probar los servicios externos de chat y voz, usar la URL pública con conexión a Internet. El usuario los activa expresamente tras leer la información de la demo; antes no se cargan sus scripts. La voz conserva el perfil aceptado por Jonathan.
 
-## Límites de seguridad de la demo
+`python tests/smoke.py` comprueba con Chrome: cinco tamaños de pantalla, errores JS, precios y escenarios, enlaces compartibles, impresión, acordeones y carga diferida de los códigos de widget. Los scripts externos se sustituyen en esa prueba por respuestas vacías; **no verifica por sí sola las respuestas del agente**. Las pruebas reales de conversación se documentan internamente en `PROGRESS.md` y `CONFIG_GHL_DEMO.md`.
 
-- El recorrido guiado usa una agenda en memoria dentro del navegador. Al recargar, se borran sus citas simuladas.
-- El chat y el módulo de voz reales usan un calendario distinto, aislado en GHL, con huecos ficticios. Sus mensajes y reservas de prueba sí se guardan en la subcuenta de OMNIA; usar datos inventados.
-- Fechas y horas inventadas. No se consulta ni modifica la disponibilidad real.
-- El simulador de reservas está limitado a fisioterapia. Los servicios de entrenamiento aparecen en la web, pero no en su agenda de prueba.
-- La vista de WhatsApp no envía mensajes. La vista de llamada no marca números. La voz, si se activa, utiliza solo la síntesis local del navegador.
-- No se deben proporcionar datos médicos ni de pacientes. El widget puede solicitar un dato de contacto ficticio para completar una reserva de prueba.
-- Las imágenes de portada, fondos y tarjetas son conceptuales y generadas para este prototipo; no representan a Paco, su equipo ni sus instalaciones.
-- Los servicios, dirección, teléfono e Instagram se basan en el briefing facilitado. Paco confirmó después que utilizan Google Calendar y cuentan con cinco fisioterapeutas; la estructura de sus calendarios individuales sigue pendiente. Horarios, precios, nombres del equipo e integración permanecen sin confirmar.
+## Límites
 
-## Para pasar de demo a proyecto
+- Un único calendario de demostración aislado en OMNIA, solo fisioterapia. Sin Google Calendar, WhatsApp, teléfono o pacientes reales del centro.
+- El chat y la voz pueden guardar conversaciones y reservas ficticias en la subcuenta. Usar solo datos inventados, nunca datos de salud. Desactivar/recargar retira los widgets, pero no borra lo enviado.
+- Se ha retirado el simulador local que duplicaba las pruebas. Las cancelaciones, cambios, recordatorios, transferencias y canales de producción son **alcance propuesto**, no acciones verificadas de esta demo.
+- La IA administrativa no debe diagnosticar, dar pautas médicas ni recoger historias clínicas. Una cita puede revelar información de salud: no se conecta producción sin revisar base jurídica, proveedores y garantías.
+- Los precios y cupos son una propuesta comercial OMNIA, no una suscripción activa ni límites nativos garantizados del proveedor. El control y la medición se validan antes del arranque.
+- La comparación económica son tarifas propuestas por trabajo, no un precio anterior ficticio. Si se elige Esencial se retira la valoración del agente. No hay contratación ni pago online.
+- La propuesta puede imprimirse/guardarse como PDF desde el navegador y compartirse por URL sin datos personales. El contacto comercial abre el correo del usuario; no envía mensajes automáticamente.
+- Las imágenes son conceptuales y no representan al centro, instalaciones o equipo. La valoración 4,9/5 con 30 reseñas se consultó en [Google Maps](https://www.google.com/maps?cid=7383613060296208757) el 1 de octubre de 2026. Los extractos conservan atribución y enlace al original.
 
-Confirmar con el centro su agenda/software, tipos y duración de citas, disponibilidad, reglas de cancelación, números/canales autorizados, textos de consentimiento y recordatorios, información pública definitiva e identidad gráfica/fotografía propia.
+## Antes de producción
+
+Confirmar identidad jurídica del centro y de OMNIA, DPD/asesoría, reparto de las cinco agendas, duración y reglas de cita, canales/números autorizados, atención humana y excepciones, textos y recursos definitivos. Documentar contrato de encargo y subencargados, bases jurídicas, admisibilidad de datos sanitarios, transferencias, riesgos/EIPD cuando proceda, derechos, conservación, grabación, cookies y recuperación. Validar límites reales y costes antes de contratar.
+
+La sección de privacidad describe el **trabajo previsto**; no constituye una certificación ni la política legal definitiva del centro. DPD, auditoría jurídica, evaluación de impacto externa, SLA 24/7, copia independiente de todo el CRM e integraciones especiales no se presuponen incluidos.
