@@ -74,6 +74,13 @@ def run():
             assert 'micrófono se usa solo en esta demostración' in text(page, '.voice-demo-panel')
             assert 'no la voz desde la web' in text(page, '.voice-demo-panel')
             assert 'llamadas entrantes' in text(page, '#quote-support')
+            assert 'L–V 09:00–18:00 (hora peninsular)' in text(page, '#quote-support')
+            assert 'incidencias técnicas críticas los 365 días' in text(page, '#quote-support')
+            assert 'Importe base' in text(page, '.quote-tax')
+            assert 'Fiscalidad pendiente' in text(page, '#fiscal-summary')
+            assert 'no implica que el impuesto desaparezca' in text(page, '#fiscal-terms')
+            assert 'No es atención de urgencias médicas' in text(page, '#support-terms')
+            assert 'gestiona desde España' not in text(page, '#propuesta')
             assert_layout(page, width)
             if width in (390, 1440):
                 page.locator('.plan-picker').screenshot(path=str(SHOTS / f'{width}-three-plans.png'))
@@ -115,12 +122,19 @@ def run():
                     assert f'Cuota: {base + cost}' in body
                     assert f'IA: {text_limit:,}'.replace(',', '.') + ' conversaciones' in body
                     assert 'Voz por llamadas telefónicas entrantes; el micrófono es solo para la demo' in body
+                    assert 'L–V 09:00–18:00, hora peninsular; incidencias técnicas críticas los 365 días' in body
+                    assert 'Fiscalidad pendiente de validación' in body
+                    assert '+ IVA' not in body
                     assert f'bundle={bundle}' in body and 'growth=' not in body and 'wa=' not in body
                     printable = text(page, '#print-proposal-document')
                     assert 'Consumos y condiciones: Recepción IA' in printable
                     assert f'{text_limit:,}'.replace(',', '.') + ' conversaciones de texto' in printable
                     assert f'{voice_limit + minutes:,}'.replace(',', '.') + ' minutos IA de llamadas al mes' in printable
                     assert 'micrófono de esta demo no forma parte de la web final' in printable
+                    assert 'de 09:00 a 18:00, hora peninsular' in printable
+                    assert 'incidencias técnicas críticas los 365 días' in printable
+                    assert 'El tratamiento fiscal se validará antes de contratar' in printable
+                    assert '+ IVA' not in printable
                     assert 'Voz web y teléfono comparten' not in printable
                     assert 'Voz IA: 0,27 €/min · Texto IA: 0,30 €/conversación' in printable
                     assert '1.000 min por 200 €/mes (0,20 €/min)' in printable
@@ -231,7 +245,11 @@ def run():
             page.evaluate('window.print = () => {window.__printCalled = true;}')
             page.locator('#print-proposal').click()
             assert page.evaluate('window.__printCalled')
-            assert '597 €/mes + IVA' in text(page, '#print-proposal-document')
+            assert '597 €/mes · importe base' in text(page, '#print-proposal-document')
+            assert 'No se confirma una exención ni un IVA del 0 %' in text(page, '#print-proposal-document')
+            page.locator('#fiscal-summary a').click()
+            assert page.locator('#consumo').get_attribute('open') is not None
+            assert page.locator('#fiscal-terms').is_visible()
             page.locator('#consumo > summary').click()
             assert page.locator('#consumo').get_attribute('open') is None
             page.locator('.quote-meta-note a').click()

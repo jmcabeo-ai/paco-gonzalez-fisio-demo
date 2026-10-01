@@ -133,6 +133,7 @@ section[id]{scroll-margin-top:20px}
 .config-layout{grid-template-columns:1fr}.quote-summary{position:relative;top:auto;max-width:600px;width:100%;margin:30px auto 0}
 .plan-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .quote-support{font-size:13px;line-height:1.5;margin:0 0 20px}.plan-card-initial{background:#24362d}
+.plan-consumption-note a{display:inline-flex;align-items:center;min-height:44px;color:var(--lime);font:800 10px/1.5 Barlow,sans-serif;text-decoration:underline;text-underline-offset:4px}
 .plan-picker legend h3{font-size:clamp(31px,3.8vw,56px)}
 @media(max-width:1000px){.plan-grid{grid-template-columns:1fr;row-gap:44px}}
 .plan-card{padding:26px 24px}.plan-card>strong{min-height:74px;font-size:clamp(31px,2.8vw,42px);line-height:.94;overflow-wrap:normal}.plan-price{margin:20px 0 18px}.plan-price>small{font-size:12px}.plan-description{min-height:82px}.plan-card ul{font-size:14px}.plan-scope{line-height:1.5;min-height:54px}.plan-select{font-size:10px;line-height:1.4;min-height:44px}.plan-card-growth{background:#293a30;border-color:#b79579}.plan-card-growth>strong{color:var(--coral)}.plan-card-growth.is-selected{background:#35452e}.plan-card-growth .plan-select{color:var(--coral)}
