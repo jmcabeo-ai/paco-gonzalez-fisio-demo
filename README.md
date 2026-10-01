@@ -1,6 +1,6 @@
 # Demo — Centro de Fisioterapia y Entrenamiento Paco González
 
-Demostración visual e interactiva de una posible web y una recepción virtual de prueba. El widget de chat/voz está conectado solo a una subcuenta y un calendario ficticios de OMNIA; no está conectado al centro.
+Demostración visual e interactiva de una posible web y una recepción virtual de prueba. El chat flotante y el módulo de voz integrado usan una subcuenta y un calendario ficticios de OMNIA; no están conectados al centro.
 
 ## Probar localmente
 
@@ -9,7 +9,7 @@ Abre `index.html` en un navegador para usar el recorrido guiado sin servidor. El
 ## Límites de seguridad de la demo
 
 - El recorrido guiado usa una agenda en memoria dentro del navegador. Al recargar, se borran sus citas simuladas.
-- El widget real por chat/voz usa un calendario distinto, aislado en GHL, con huecos ficticios. Sus mensajes y reservas de prueba sí se guardan en la subcuenta de OMNIA; usar datos inventados.
+- El chat y el módulo de voz reales usan un calendario distinto, aislado en GHL, con huecos ficticios. Sus mensajes y reservas de prueba sí se guardan en la subcuenta de OMNIA; usar datos inventados.
 - Fechas y horas inventadas. No se consulta ni modifica la disponibilidad real.
 - El simulador de reservas está limitado a fisioterapia. Los servicios de entrenamiento aparecen en la web, pero no en su agenda de prueba.
 - La vista de WhatsApp no envía mensajes. La vista de llamada no marca números. La voz, si se activa, utiliza solo la síntesis local del navegador.

@@ -23,8 +23,10 @@ def run() -> None:
             page.screenshot(path=str(SHOTS / f'{name}-hero.png'), full_page=True)
             assert page.locator('h1').is_visible()
             assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), f'{name}: horizontal overflow'
-            assert page.locator('script[data-widget-id="6abe41ccf1b243568a77a97e"]').count() == 1
-            assert 'conversación en directo' in page.locator('.live-demo-panel').inner_text().lower()
+            assert page.locator('script[data-widget-id="6abe4375b9739b959273ef08"]').count() == 1
+            assert page.locator('script[data-widget-id="6abe41a6cdeb03a6d5b9b175"]').count() == 1
+            assert 'chat con ia' in page.locator('.live-demo-panel').inner_text().lower()
+            assert 'voz en el navegador' in page.locator('.voice-demo-panel').inner_text().lower()
             assert 'agenda, WhatsApp ni teléfono del centro' in page.locator('.demo-ribbon').inner_text()
             assert page.locator('.opportunity-card').count() == 4
             assert 'no funciones activas' in page.locator('#oportunidades').inner_text()
