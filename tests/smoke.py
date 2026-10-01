@@ -56,7 +56,7 @@ def run():
             assert page.locator('.bonus-grid article').count() == 3
             assert '4,9' in text(page, '.rating-block')
             assert 'agenda, WhatsApp ni teléfono del centro' in text(page, '.demo-ribbon')
-            assert page.locator('[name="service-plan"]').count() == 2
+            assert page.locator('[name="service-plan"]').count() == 3
             assert page.locator('#extra-growth,#add-growth-capacity,#extra-whatsapp').count() == 0
             assert page.locator('#consumo').get_attribute('open') is None
             assert page.locator('#limited-consumption').is_hidden()
@@ -71,9 +71,12 @@ def run():
             assert page.locator('#quote-unlimited').is_hidden()
             assert page.locator('#quote-estimated').is_hidden(), 'Simulation must be secondary, not in primary summary'
             assert page.locator('.monthly-total').get_attribute('aria-live') == 'polite'
+            assert 'micrófono se usa solo en esta demostración' in text(page, '.voice-demo-panel')
+            assert 'no la voz desde la web' in text(page, '.voice-demo-panel')
+            assert 'llamadas entrantes' in text(page, '#quote-support')
             assert_layout(page, width)
             if width in (390, 1440):
-                page.locator('.plan-picker').screenshot(path=str(SHOTS / f'{width}-two-plans.png'))
+                page.locator('.plan-picker').screenshot(path=str(SHOTS / f'{width}-three-plans.png'))
                 page.locator('#consumo').screenshot(path=str(SHOTS / f'{width}-conditions-closed.png'))
             page.locator('.external-costs a').click()
             assert page.locator('#consumo').get_attribute('open') is not None
@@ -86,35 +89,59 @@ def run():
                 assert amount(page, f'#bundle-{bundle}-price') == f'+{cost} €'
                 assert amount(page, f'#bundle-{bundle}-rate') == f'{rate} €/min'
             scenarios = [(20, 50, 3), (60, 0, 3), (60, 100, 1), (60, 50, 3), (60, 100, 8), (5, 5, 1.5)]
-            for bundle, minutes, cost in [('none', 0, 0), ('200', 200, 50), ('500', 500, 110), ('1000', 1000, 200)]:
-                page.locator(f'[name="voice-bundle"][value="{bundle}"]').check()
-                assert amount(page, '#quote-monthly') == str(297 + cost)
-                assert amount(page, '#quote-year-total') == f'{997 + (297 + cost) * 12} €'
-                assert page.locator('#quote-bundle-line').is_visible() == bool(minutes)
-                for daily, share, duration in scenarios:
-                    set_range(page, '#daily-contacts', daily)
-                    set_range(page, '#voice-share', share)
-                    set_range(page, '#call-duration', duration)
-                    total = daily * 22
-                    expected_text = math.floor(total * (100 - share) / 100 + 0.5)
-                    expected_minutes = math.ceil(total * share / 100 * duration)
-                    excess_text = max(0, expected_text - 600)
-                    excess_voice = max(0, expected_minutes - 600 - minutes)
-                    excess = round(excess_text * 0.30 + excess_voice * 0.27, 2)
-                    assert page.locator('#estimated-conversations').inner_text() == f'{expected_text:,}'.replace(',', '.')
-                    assert page.locator('#estimated-minutes').inner_text() == f'{expected_minutes:,}'.replace(',', '.')
-                    assert amount(page, '#quote-estimated').startswith(price_number(round(297 + cost + excess, 2)) + ' '), (width, bundle, daily, share, duration)
-                    assert page.locator('#quote-overage-detail').is_visible() == bool(excess)
-                    assert f'{600 + minutes:,}'.replace(',', '.') + ' minutos IA/mes' in text(page, '#usage-fit')
-                body = mail_body(page)
-                assert f'Cuota: {297 + cost}' in body
-                assert f'bundle={bundle}' in body and 'growth=' not in body and 'wa=' not in body
-                printable = text(page, '#print-proposal-document')
-                assert 'Consumos y condiciones: Recepción IA' in printable
-                assert 'Voz IA: 0,27 €/min · Texto IA: 0,30 €/conversación' in printable
-                assert '1.000 min por 200 €/mes (0,20 €/min)' in printable
-                assert 'Crecimiento 67' not in printable
-                assert ('+ bono de voz' in printable) == bool(minutes)
+            for plan, base, text_limit, voice_limit in [('initial', 197, 300, 100), ('complete', 297, 600, 600)]:
+                page.locator(f'[name="service-plan"][value="{plan}"]').check()
+                for bundle, minutes, cost in [('none', 0, 0), ('200', 200, 50), ('500', 500, 110), ('1000', 1000, 200)]:
+                    page.locator(f'[name="voice-bundle"][value="{bundle}"]').check()
+                    assert amount(page, '#quote-monthly') == str(base + cost)
+                    assert amount(page, '#quote-year-total') == f'{997 + (base + cost) * 12} €'
+                    assert page.locator('#quote-bundle-line').is_visible() == bool(minutes)
+                    for daily, share, duration in scenarios:
+                        set_range(page, '#daily-contacts', daily)
+                        set_range(page, '#voice-share', share)
+                        set_range(page, '#call-duration', duration)
+                        total = daily * 22
+                        expected_text = math.floor(total * (100 - share) / 100 + 0.5)
+                        expected_minutes = math.ceil(total * share / 100 * duration)
+                        excess_text = max(0, expected_text - text_limit)
+                        excess_voice = max(0, expected_minutes - voice_limit - minutes)
+                        excess = round(excess_text * 0.30 + excess_voice * 0.27, 2)
+                        assert page.locator('#estimated-conversations').inner_text() == f'{expected_text:,}'.replace(',', '.')
+                        assert page.locator('#estimated-minutes').inner_text() == f'{expected_minutes:,}'.replace(',', '.')
+                        assert amount(page, '#quote-estimated').startswith(price_number(round(base + cost + excess, 2)) + ' '), (width, bundle, daily, share, duration)
+                        assert page.locator('#quote-overage-detail').is_visible() == bool(excess)
+                        assert f'{voice_limit + minutes:,}'.replace(',', '.') + ' minutos IA/mes' in text(page, '#usage-fit')
+                    body = mail_body(page)
+                    assert f'Cuota: {base + cost}' in body
+                    assert f'IA: {text_limit:,}'.replace(',', '.') + ' conversaciones' in body
+                    assert 'Voz por llamadas telefónicas entrantes; el micrófono es solo para la demo' in body
+                    assert f'bundle={bundle}' in body and 'growth=' not in body and 'wa=' not in body
+                    printable = text(page, '#print-proposal-document')
+                    assert 'Consumos y condiciones: Recepción IA' in printable
+                    assert f'{text_limit:,}'.replace(',', '.') + ' conversaciones de texto' in printable
+                    assert f'{voice_limit + minutes:,}'.replace(',', '.') + ' minutos IA de llamadas al mes' in printable
+                    assert 'micrófono de esta demo no forma parte de la web final' in printable
+                    assert 'Voz web y teléfono comparten' not in printable
+                    assert 'Voz IA: 0,27 €/min · Texto IA: 0,30 €/conversación' in printable
+                    assert '1.000 min por 200 €/mes (0,20 €/min)' in printable
+                    assert 'Crecimiento 67' not in printable
+                    assert ('+ bono de voz' in printable) == bool(minutes)
+                if plan == 'initial':
+                    page.locator('[name="voice-bundle"][value="none"]').check()
+                    set_range(page, '#daily-contacts', 20)
+                    set_range(page, '#voice-share', 50)
+                    set_range(page, '#call-duration', 3)
+                    assert amount(page, '#quote-monthly') == '197'
+                    assert amount(page, '#quote-year-total') == '3361 €'
+                    assert amount(page, '#quote-estimated').startswith('348,20 ')
+                    assert '30 min de ajustes/mes. Sin revisión mensual' in text(page, '#quote-support')
+                    assert 'cupo de 300' in text(page, '#usage-counting-terms')
+                    assert '100 minutos IA de llamadas telefónicas entrantes' in text(page, '#usage-counting-terms')
+                    if width in (390, 1440):
+                        page.locator('.quote-summary').screenshot(path=str(SHOTS / f'{width}-initial-quote.png'))
+                        page.emulate_media(media='print')
+                        page.locator('#print-proposal-document').screenshot(path=str(SHOTS / f'{width}-initial-print.png'))
+                        page.emulate_media(media='screen')
             page.locator('[name="service-plan"][value="elite"]').check()
             assert amount(page, '#quote-monthly') == '597'
             assert amount(page, '#quote-year-total') == '8161 €'
@@ -226,7 +253,7 @@ def run():
             page.keyboard.press('Escape')
             assert not errors, (width, errors)
             context.close()
-            print(f'OK {width}px: 24 limited-plan scenarios + 6 unlimited scenarios, print/mail/links/privacy/layout.', flush=True)
+            print(f'OK {width}px: 48 limited-plan scenarios + 6 unlimited scenarios, print/mail/links/privacy/layout.', flush=True)
 
         context = browser.new_context(reduced_motion='reduce')
         context.route('https://widgets.leadconnectorhq.com/**', lambda route: route.abort())
@@ -234,8 +261,11 @@ def run():
         errors = []
         page.on('pageerror', lambda error: errors.append(str(error)))
         for query, monthly, notice in [
-            ('plan=digital&wa=0&growth=1&bundle=500&daily=10&voice=25&duration=2', '297', True),
+            ('plan=digital&wa=0&growth=1&bundle=500&daily=10&voice=25&duration=2', '197', True),
             ('plan=essential&wa=0&bundle=1000', '297', True),
+            ('plan=initial&wa=0', '197', False),
+            ('plan=initial&bundle=500', '307', False),
+            ('plan=initial&bundle=1000', '397', False),
             ('plan=complete&wa=1', '297', False),
             ('plan=complete&growth=1&bundle=200', '347', True),
             ('plan=elite&wa=1&growth=1&bundle=1000', '597', True),
@@ -265,6 +295,9 @@ def run():
         assert page.locator('#consumo').get_attribute('open') is not None
         assert '1.100 minutos' in text(page, '#print-proposal-document')
         assert 'bono de voz 500 min: 110 €/mes' in text(page, '#print-proposal-document')
+        page.goto(BASE_URL + '?plan=initial&bundle=200#propuesta', wait_until='networkidle')
+        assert amount(page, '#quote-monthly') == '247'
+        assert '300 conversaciones de texto y 300 minutos IA de llamadas' in text(page, '#print-proposal-document')
         page.goto(BASE_URL + '#%', wait_until='networkidle')
         assert not errors
         context.close()
@@ -272,4 +305,4 @@ def run():
 
 if __name__ == '__main__':
     run()
-    print('OK: two plans 297/597 + setup997, 5 viewports, 150 use scenarios, unlimited has no bundles/overage, secondary terms with deep links, Meta tariffs, print/mail/share and clipboard fallback, legacy/invalid links, unchanged consent-gated widgets. No real conversations or subscriptions.')
+    print('OK: three plans 197/297/597 + setup997, 5 viewports, 270 use scenarios, unlimited has no bundles/overage, secondary terms with deep links, Meta tariffs, print/mail/share and clipboard fallback, legacy/invalid links, unchanged consent-gated widgets. Microphone demo-only; production inbound phone calls. No real conversations or subscriptions.')
