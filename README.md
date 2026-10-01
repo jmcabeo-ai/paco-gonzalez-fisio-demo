@@ -14,7 +14,7 @@ Abre `index.html` en un navegador para usar el recorrido guiado sin servidor. El
 - El simulador de reservas está limitado a fisioterapia. Los servicios de entrenamiento aparecen en la web, pero no en su agenda de prueba.
 - La vista de WhatsApp no envía mensajes. La vista de llamada no marca números. La voz, si se activa, utiliza solo la síntesis local del navegador.
 - No se deben proporcionar datos médicos ni de pacientes. El widget puede solicitar un dato de contacto ficticio para completar una reserva de prueba.
-- La foto de portada es una imagen conceptual generada para este prototipo; no representa a Paco, su equipo ni sus instalaciones.
+- Las imágenes de portada, fondos y tarjetas son conceptuales y generadas para este prototipo; no representan a Paco, su equipo ni sus instalaciones.
 - Los servicios, dirección, teléfono e Instagram se basan en el briefing facilitado. Paco confirmó después que utilizan Google Calendar y cuentan con cinco fisioterapeutas; la estructura de sus calendarios individuales sigue pendiente. Horarios, precios, nombres del equipo e integración permanecen sin confirmar.
 
 ## Para pasar de demo a proyecto

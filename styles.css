@@ -36,3 +36,30 @@
 .voice-demo-panel{display:grid;grid-template-columns:minmax(0,.85fr) minmax(300px,1fr);gap:clamp(24px,4vw,65px);align-items:center;padding:clamp(24px,4vw,56px);margin:27px 0 28px;background:#14211e;color:#f1f2e8;border:1px solid rgba(199,244,109,.5);position:relative;overflow:hidden}.voice-demo-panel::before{content:"";position:absolute;width:410px;height:410px;border:1px solid rgba(199,244,109,.18);border-radius:50%;left:-180px;bottom:-260px;pointer-events:none}.voice-demo-copy{position:relative;z-index:1}.voice-demo-copy .live-demo-kicker{color:#c7f46d}.voice-demo-copy h3{font:800 clamp(60px,6vw,94px)/.82 Barlow Condensed,Impact,sans-serif;letter-spacing:-.02em;margin:24px 0}.voice-demo-copy h3 em{font-style:italic;color:#c7f46d}.voice-demo-copy p{font-size:18px;line-height:1.45;max-width:430px}.voice-demo-copy small{display:block;color:#bdcabb;font-size:13px;line-height:1.45;margin-top:30px;max-width:390px}.voice-demo-embed{min-width:0;min-height:340px;display:grid;place-items:center;padding:20px;background:#f1f2e8;border-radius:22px;box-shadow:12px 12px 0 rgba(199,244,109,.2)}
 @media(max-width:760px){.voice-demo-panel{grid-template-columns:1fr}.voice-demo-embed{min-height:330px}.voice-demo-copy h3{font-size:clamp(63px,12vw,85px)}}
 @media(max-width:480px){.voice-demo-panel{padding:24px 20px}.voice-demo-embed{padding:10px;min-height:300px;box-shadow:6px 6px 0 rgba(199,244,109,.2)}.voice-demo-copy h3{font-size:68px}.voice-demo-copy p{font-size:16px}}
+
+/* Conceptual photographic atmosphere: the colour system remains the foreground. */
+.manifesto,.services,.groups-feature,.demo-section,.opportunity-section{position:relative;isolation:isolate;overflow:hidden}
+.manifesto::before,.services::before,.groups-feature::before,.demo-section::before,.opportunity-section::before{content:"";position:absolute;inset:-18px;z-index:0;background-size:cover;background-repeat:no-repeat;pointer-events:none;filter:blur(11px) saturate(.7);transform:scale(1.035)}
+.manifesto::before{background-image:url('assets/fisioterapia-ambiente.webp');background-position:center 42%;opacity:.20;mix-blend-mode:multiply}
+.services::before{background-image:url('assets/fisioterapia-ambiente.webp');background-position:center 48%;opacity:.15;mix-blend-mode:multiply}
+.groups-feature::before{background-image:url('assets/entrenamiento-grupo-ambiente.webp');background-position:center 40%;opacity:.21;mix-blend-mode:multiply}
+.demo-section::before{background-image:url('assets/fisioterapia-ambiente.webp');background-position:center 58%;opacity:.17;mix-blend-mode:screen}
+.opportunity-section::before{background-image:url('assets/entrenamiento-grupo-ambiente.webp');background-position:center 48%;opacity:.16;mix-blend-mode:multiply}
+.manifesto .section-index,.manifesto-body,.services .section-head,.services .service-grid,.services .service-footnote,.groups-copy,.groups-art,.demo-section > *,.opportunity-head,.opportunity-grid,.opportunity-foot{position:relative;z-index:1}
+.groups-art::before{content:"";position:absolute;inset:0;border-radius:50%;background:url('assets/entrenamiento-grupo-ambiente.webp') 48% center/cover;filter:blur(4px);opacity:.27;clip-path:circle(50%);pointer-events:none}
+
+/* Blurred image layers inside the coloured service and opportunity cards. */
+.service-card,.opportunity-card{isolation:isolate}
+.service-card::before,.opportunity-card::before{content:"";position:absolute;inset:-7px;z-index:0;background-image:var(--card-photo);background-size:cover;background-position:var(--card-position,center);filter:blur(3px) saturate(.76);opacity:var(--card-photo-opacity,.44);transform:scale(1.025);pointer-events:none}
+.service-card::after,.opportunity-card::after{content:"";position:absolute;inset:0;z-index:0;background:var(--card-wash);pointer-events:none}
+.service-card > :not(.card-corner),.opportunity-card > *{position:relative;z-index:1}
+.service-card .card-corner{z-index:1}
+.service-card-lime{--card-photo:url('assets/fisioterapia-ambiente.webp');--card-position:47% center;--card-photo-opacity:.49;--card-wash:linear-gradient(180deg,rgba(199,244,109,.30),rgba(199,244,109,.91) 69%,rgba(199,244,109,.97))}
+.service-card-dark{--card-photo:url('assets/entrenamiento-grupo-ambiente.webp');--card-position:50% center;--card-photo-opacity:.65;--card-wash:linear-gradient(180deg,rgba(20,33,30,.35),rgba(20,33,30,.88) 69%,rgba(20,33,30,.98))}
+.service-card-coral{--card-photo:url('assets/entrenamiento-grupo-ambiente.webp');--card-position:76% center;--card-photo-opacity:.47;--card-wash:linear-gradient(180deg,rgba(245,167,140,.36),rgba(245,167,140,.90) 69%,rgba(245,167,140,.97))}
+.service-card-cream{--card-photo:url('assets/fisioterapia-ambiente.webp');--card-position:76% center;--card-photo-opacity:.45;--card-wash:linear-gradient(180deg,rgba(216,220,208,.34),rgba(216,220,208,.91) 69%,rgba(216,220,208,.98))}
+.opportunity-card:nth-child(1){--card-photo:url('assets/fisioterapia-ambiente.webp');--card-position:53% center;--card-photo-opacity:.55;--card-wash:linear-gradient(180deg,rgba(20,33,30,.42),rgba(20,33,30,.93) 65%,rgba(20,33,30,.98))}
+.opportunity-card:nth-child(2){--card-photo:url('assets/entrenamiento-grupo-ambiente.webp');--card-position:35% center;--card-photo-opacity:.47;--card-wash:linear-gradient(180deg,rgba(199,244,109,.34),rgba(199,244,109,.91) 65%,rgba(199,244,109,.98))}
+.opportunity-card:nth-child(3){--card-photo:url('assets/fisioterapia-ambiente.webp');--card-position:72% center;--card-photo-opacity:.47;--card-wash:linear-gradient(180deg,rgba(245,167,140,.33),rgba(245,167,140,.91) 65%,rgba(245,167,140,.98))}
+.opportunity-card:nth-child(4){--card-photo:url('assets/entrenamiento-grupo-ambiente.webp');--card-position:78% center;--card-photo-opacity:.43;--card-wash:linear-gradient(180deg,rgba(212,230,207,.36),rgba(212,230,207,.92) 65%,rgba(212,230,207,.98))}
+@media(max-width:760px){.manifesto::before,.services::before,.groups-feature::before,.demo-section::before,.opportunity-section::before{filter:blur(8px) saturate(.7)}.service-card::before,.opportunity-card::before{filter:blur(2.5px) saturate(.76)}}

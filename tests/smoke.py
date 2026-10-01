@@ -30,6 +30,8 @@ def run() -> None:
             assert 'agenda, WhatsApp ni teléfono del centro' in page.locator('.demo-ribbon').inner_text()
             assert page.locator('.opportunity-card').count() == 4
             assert 'no funciones activas' in page.locator('#oportunidades').inner_text()
+            assert page.evaluate("getComputedStyle(document.querySelector('.service-card'), '::before').backgroundImage.includes('fisioterapia-ambiente.webp')")
+            page.locator('#servicios').screenshot(path=str(SHOTS / f'{name}-servicios.png'))
             page.locator('#oportunidades').screenshot(path=str(SHOTS / f'{name}-oportunidades.png'))
             page.locator('#demo').scroll_into_view_if_needed()
             page.get_by_role('button', name='Buscar cita de ejemplo').click()
