@@ -110,11 +110,11 @@
     append('p', 'OMNIA / JONATHAN MARTÍNEZ', 'print-eyebrow');
     append('h1', 'Propuesta para Paco González');
     append('p', 'Centro de Fisioterapia y Entrenamiento · Roquetas de Mar · Simulación comercial. Ningún servicio se activa desde esta página.');
-    append('h2', 'Puesta en marcha: ' + euro(pricing.setup) + ' (importe base), una sola vez');
+    append('h2', 'Puesta en marcha: ' + euro(pricing.setup) + ', una sola vez');
     append('p', 'Web personalizada y móvil, CRM OMNIA, asistentes de texto y voz y agenda de fisioterapia. Configuración estándar de hasta cinco agendas de Google Calendar tras validar permisos, estructura y reglas. Chat de texto web, un número de WhatsApp y atención de voz por llamadas telefónicas entrantes. El micrófono de esta demo no forma parte de la web final. Confirmación, recordatorio y avisos al equipo. Reservas, cambios, cancelaciones y derivación se prueban antes de conectar producción. Dos revisiones de la web. Dominio estándar primer año hasta 20 €.');
-    append('p', 'Tarifas propuestas por separado, no un precio anterior: web 790 € + agentes texto/voz 690 € + agenda y automatizaciones 390 € + CRM 190 € = ' + euro(pricing.standalone) + '. Paquete 997 €; diferencia ' + euro(pricing.standalone - pricing.setup) + '. Importes base; impuestos no incluidos.');
+    append('p', 'Tarifas propuestas por separado, no un precio anterior: web 790 € + agentes texto/voz 690 € + agenda y automatizaciones 390 € + CRM 190 € = ' + euro(pricing.standalone) + '. Paquete 997 €; diferencia ' + euro(pricing.standalone - pricing.setup) + '. ');
     append('p', 'Bonus: formación de 90 min y guía, revisión a los 30 días y kit de QR/enlaces con plantilla de reseñas. Permisos y avisos aprobados, pruebas y validación previa al arranque. 50 % al inicio y 50 % al validar la entrega.');
-    append('h2', selected.plan.name + ': ' + euro(selected.monthly) + '/mes · importe base');
+    append('h2', selected.plan.name + ': ' + euro(selected.monthly) + '/mes');
     append('p', 'Plan ' + euro(selected.plan.price) + '/mes, canal WhatsApp incluido (un número, sin suplemento fijo)' + (selected.bundle.minutes ? ' + bono de voz ' + number(selected.bundle.minutes) + ' min: ' + euro(selected.bundle.price) + '/mes' : '') + '. Telefonía, mensajes de Meta y procesamiento, SMS y correo facturables aparte.');
     append('p', 'Atención administrativa por chat de texto web, WhatsApp y llamadas telefónicas entrantes; reservas y gestión de citas tras validación, confirmaciones y recordatorios. Web, alojamiento, CRM, mantenimiento correctivo y soporte técnico L–V de 09:00 a 18:00 (hora peninsular) y atención de incidencias técnicas críticas los 365 días del año. Hasta ' + number(selected.plan.adjustments) + ' min de ajustes menores por mes, sin acumulación. ' + (selected.plan.review ? 'Revisión mensual de hasta ' + number(selected.plan.review) + ' min.' : 'Sin revisión mensual de optimización.') + ' La IA no diagnostica ni prescribe.');
     if (selected.plan.unlimited) {
@@ -125,16 +125,16 @@
       append('p', 'Incluye ' + number(selected.textLimit) + ' conversaciones de texto y ' + number(selected.voiceLimit) + ' minutos IA de llamadas al mes. Web/WhatsApp comparten texto; los minutos son para llamadas telefónicas entrantes. El micrófono se usa solo en la demo. Reseñas, lista de espera y seguimiento automatizados son parte del plan superior, no de este plan.');
       append('p', bundleSelection(selected));
       append('h2', 'Consumos y condiciones: ' + selected.plan.name);
-      append('p', ratesText() + '. Solo exceso autorizado tras el cupo total. Precios antes de impuestos; consumos externos aparte.');
+      append('p', ratesText() + '. Solo exceso autorizado tras el cupo total. Consumos externos aparte.');
       append('p', 'Bonos mensuales opcionales de voz: ' + Object.keys(pricing.voiceBundles).filter(function (key) { return key !== 'none'; }).map(function (key) { const bundle = pricing.voiceBundles[key]; return number(bundle.minutes) + ' min por ' + euro(bundle.price) + '/mes (' + euro(bundle.price / bundle.minutes) + '/min)'; }).join('; ') + '. Un único bono, facturado completo aunque uses menos, sin acumulación de saldo. No incluye texto. No se aplica al plan de 597 €.');
       append('p', 'Cupo OMNIA: sesión de texto de 24 h por contacto/canal, hasta 20 respuestas IA. Aviso previsto al 80 % y pausa/derivación al límite sin autorización. Medición y controles se verifican antes de producción.');
     }
     append('h2', 'Escenario opcional de uso IA, no una previsión clínica');
     append('p', number(Number(daily.value)) + ' consultas diarias × 22 días; ' + share.value + ' % por llamada, ' + duration.value + ' min de duración. Ejemplo: ' + number(selected.text) + ' conversaciones de texto y ' + number(selected.minutes) + ' minutos IA de llamadas al mes.');
     if (selected.plan.unlimited) {
-      append('p', 'El ejemplo no añade cargos de IA: cuota ' + euro(selected.monthly) + '/mes · importe base. Uso razonable. No estima telefonía, Meta ni otros consumos externos.');
+      append('p', 'El ejemplo no añade cargos de IA: cuota ' + euro(selected.monthly) + '/mes. Uso razonable. No estima telefonía, Meta ni otros consumos externos.');
     } else {
-      append('p', 'Exceso IA estimado si lo autorizas: ' + euro(selected.overage) + '/mes. Cuota + ese exceso: ' + euro(selected.monthly + selected.overage) + '/mes, antes de impuestos y consumos externos.');
+      append('p', 'Exceso IA estimado si lo autorizas: ' + euro(selected.overage) + '/mes. Cuota + ese exceso: ' + euro(selected.monthly + selected.overage) + '/mes, sin consumos externos.');
       if (selected.overage) append('p', 'Desglose del exceso estimado: ' + overageDetails(selected) + '.');
     }
     append('h2', 'WhatsApp incluido: mensajes y plantillas');
@@ -150,11 +150,12 @@
     append('h2', 'Condiciones y siguiente paso');
     document.querySelectorAll('.service-conditions p').forEach(function (paragraph) { append('p', paragraph.textContent); });
     append('p', 'No incluye campañas nuevas, llamadas comerciales salientes ni llamadas por WhatsApp. Entrenamiento fuera de la agenda inicial. El alcance final, licencia y facturación se validan antes de contratar.');
-    append('p', 'Ejemplo de 12 meses con la misma selección: ' + euro(pricing.setup + selected.monthly * 12) + ', no incluye impuestos, excesos ni consumos externos. ' + (selected.bundle.minutes ? 'Incluye el bono mensual elegido. ' : '') + 'No implica permanencia anual.');
+    append('p', 'Ejemplo de 12 meses con la misma selección: ' + euro(pricing.setup + selected.monthly * 12) + ', no incluye excesos ni consumos externos. ' + (selected.bundle.minutes ? 'Incluye el bono mensual elegido. ' : '') + 'No implica permanencia anual.');
     append('h2', 'Privacidad, seguridad y control');
     append('p', 'Implantación técnica de permisos, minimización, mapa de datos/proveedores y avisos/textos aprobados. Coordinación con el DPD/asesoría del centro para bases jurídicas, contrato de encargo, datos sanitarios, transferencias y riesgos. Revisar obligación de DPD y necesidad de evaluación de impacto antes de producción. DPD, auditoría jurídica y evaluación de impacto externa no incluidos.');
     append('p', 'IA administrativa identificada como tal, sin diagnóstico ni solicitud de historias clínicas. Grabación/transcripción tras definir información, base jurídica, acceso y conservación. Marketing separado de citas. Documentar incidencias, recuperación, derechos y devolución/borrado. Sin certificación global de cumplimiento ni garantía de atención humana continua para consultas ordinarias. Validación previa al uso de pacientes reales.');
     append('p', 'Contacto: jonathan@omniagsistems.com · ' + selectionURL(), 'print-contact');
+    append('p', document.getElementById('commercial-tax-note').textContent, 'print-contact');
   }
 
   function updateQuote() {
@@ -193,9 +194,9 @@
     setText('quote-bundle-price', euro(selected.bundle.price) + '/mes');
     setText('quote-monthly', number(selected.monthly));
     setText('quote-year-total', euro(pricing.setup + selected.monthly * 12));
-    setText('quote-year-description', 'Alta + 12 cuotas' + (selected.bundle.minutes ? ', incluido el bono elegido' : '') + '. No incluye impuestos, excesos ni consumos externos; no implica permanencia anual.');
+    setText('quote-year-description', 'Alta + 12 cuotas' + (selected.bundle.minutes ? ', incluido el bono elegido' : '') + '. No incluye excesos ni consumos externos; no implica permanencia anual.');
     setText('quote-estimated', euro(selected.monthly + selected.overage) + '/mes');
-    setText('quote-overage', selected.plan.unlimited ? 'Este ejemplo no añade cargos de IA. Uso razonable; telefonía, Meta y otros consumos externos aparte.' : (selected.overage ? euro(selected.overage) + ' de exceso IA estimado si lo autorizas. Impuestos y consumos externos aparte.' : 'Tu escenario entra en el cupo IA. Impuestos y consumos externos aparte.'));
+    setText('quote-overage', selected.plan.unlimited ? 'Este ejemplo no añade cargos de IA. Uso razonable; telefonía, Meta y otros consumos externos aparte.' : (selected.overage ? euro(selected.overage) + ' de exceso IA estimado si lo autorizas. Consumos externos aparte.' : 'Tu escenario entra en el cupo IA. Consumos externos aparte.'));
     setText('voice-unit-price', euro(pricing.voiceOverage));
     setText('text-unit-price', euro(pricing.textOverage));
     setText('quote-rates', ratesText());
@@ -207,16 +208,16 @@
     setText('usage-counting-terms', counting);
     let fit;
     if (selected.plan.unlimited) {
-      fit = 'Sin cupos IA de OMNIA: la cuota del ejemplo sigue en 597 €/mes · base. Sujeto a uso razonable; no incluye consumos externos ni garantiza capacidad simultánea ilimitada.';
+      fit = 'Sin cupos IA de OMNIA: la cuota del ejemplo sigue en 597 €/mes. Sujeto a uso razonable; no incluye consumos externos ni garantiza capacidad simultánea ilimitada.';
     } else {
       fit = 'Cupo seleccionado: ' + number(selected.textLimit) + ' conversaciones y ' + number(selected.voiceLimit) + ' minutos IA/mes. ';
       fit += selected.overage ? 'Este ejemplo supera el cupo en ' + number(selected.extraText) + ' conversaciones y ' + number(selected.extraVoice) + ' minutos. Puedes elegir un bono de voz, autorizar el exceso o valorar el plan superior. No se cobra nada automáticamente.' : 'Este ejemplo cabe en el uso incluido.';
     }
     setText('usage-fit', fit);
     document.getElementById('usage-fit').classList.toggle('needs-capacity', Boolean(selected.overage));
-    const body = 'Hola, Jonathan. He probado la demo del Centro Paco González y quiero revisar esta propuesta:\n\nPuesta en marcha: 997 € (importe base), una vez.\nPlan: ' + selected.plan.name + '.\nWhatsApp: canal incluido en la cuota; Meta y procesamiento por consumo aparte.\n' +
+    const body = 'Hola, Jonathan. He probado la demo del Centro Paco González y quiero revisar esta propuesta:\n\nPuesta en marcha: 997 €, una vez.\nPlan: ' + selected.plan.name + '.\nWhatsApp: canal incluido en la cuota; Meta y procesamiento por consumo aparte.\n' +
       (selected.plan.unlimited ? 'IA: sin nuestros cupos, bonos ni cargos por exceso, bajo uso razonable. Crecimiento incluido en la cuota.\n' : 'IA: ' + number(selected.textLimit) + ' conversaciones y ' + number(selected.voiceLimit) + ' minutos/mes. Bono: ' + (selected.bundle.minutes ? number(selected.bundle.minutes) + ' min por ' + euro(selected.bundle.price) + '/mes' : 'sin bono') + '.\nExceso IA del ejemplo, solo si se autoriza: ' + euro(selected.overage) + '/mes.\n') +
-      'Cuota: ' + euro(selected.monthly) + '/mes · importe base. Voz por llamadas telefónicas entrantes; el micrófono es solo para la demo. Telefonía, Meta y otros consumos externos aparte.\nSoporte: L–V 09:00–18:00, hora peninsular; incidencias técnicas críticas los 365 días. Canal y tiempos a concretar, sin resolución inmediata garantizada.\nFiscalidad pendiente de validación antes de contratar; no se confirma una exención ni un IVA del 0 %.\n\nMi selección: ' + selectionURL();
+      'Cuota: ' + euro(selected.monthly) + '/mes. Voz por llamadas telefónicas entrantes; el micrófono es solo para la demo. Telefonía, Meta y otros consumos externos aparte.\nSoporte: L–V 09:00–18:00, hora peninsular; incidencias técnicas críticas los 365 días. Canal y tiempos a concretar, sin resolución inmediata garantizada.\n\nMi selección: ' + selectionURL() + '\n\nTodos los precios son sin IVA.';
     document.getElementById('proposal-contact').href = 'mailto:jonathan@omniagsistems.com?subject=' + encodeURIComponent('Propuesta Paco González · ' + selected.plan.name) + '&body=' + encodeURIComponent(body);
     setText('proposal-feedback', '');
     makePrintDocument(selected);

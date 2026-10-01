@@ -76,9 +76,16 @@ def run():
             assert 'llamadas entrantes' in text(page, '#quote-support')
             assert 'L–V 09:00–18:00 (hora peninsular)' in text(page, '#quote-support')
             assert 'incidencias técnicas críticas los 365 días' in text(page, '#quote-support')
-            assert 'Importe base' in text(page, '.quote-tax')
-            assert 'Fiscalidad pendiente' in text(page, '#fiscal-summary')
-            assert 'no implica que el impuesto desaparezca' in text(page, '#fiscal-terms')
+            assert text(page, '.quote-tax') == 'Consumos externos aparte'
+            assert text(page, '#commercial-tax-note') == 'Todos los precios son sin IVA.'
+            assert page.locator('#fiscal-summary,#fiscal-terms').count() == 0
+            assert 'Fiscalidad pendiente' not in text(page, '#propuesta')
+            assert 'tratamiento fiscal' not in text(page, '#propuesta')
+            assert 'inversión del sujeto pasivo' not in text(page, '#propuesta')
+            assert '· base' not in text(page, '.plan-grid')
+            tax_note = page.locator('#commercial-tax-note').bounding_box()
+            quote = page.locator('.quote-summary').bounding_box()
+            assert tax_note['y'] >= quote['y'] + quote['height'], 'VAT note must follow the proposal'
             assert 'No es atención de urgencias médicas' in text(page, '#support-terms')
             assert 'gestiona desde España' not in text(page, '#propuesta')
             assert_layout(page, width)
@@ -123,7 +130,8 @@ def run():
                     assert f'IA: {text_limit:,}'.replace(',', '.') + ' conversaciones' in body
                     assert 'Voz por llamadas telefónicas entrantes; el micrófono es solo para la demo' in body
                     assert 'L–V 09:00–18:00, hora peninsular; incidencias técnicas críticas los 365 días' in body
-                    assert 'Fiscalidad pendiente de validación' in body
+                    assert body.endswith('Todos los precios son sin IVA.')
+                    assert 'Fiscalidad pendiente' not in body
                     assert '+ IVA' not in body
                     assert f'bundle={bundle}' in body and 'growth=' not in body and 'wa=' not in body
                     printable = text(page, '#print-proposal-document')
@@ -133,7 +141,10 @@ def run():
                     assert 'micrófono de esta demo no forma parte de la web final' in printable
                     assert 'de 09:00 a 18:00, hora peninsular' in printable
                     assert 'incidencias técnicas críticas los 365 días' in printable
-                    assert 'El tratamiento fiscal se validará antes de contratar' in printable
+                    assert printable.count('Todos los precios son sin IVA.') == 1
+                    assert printable.endswith('Todos los precios son sin IVA.')
+                    assert 'tratamiento fiscal' not in printable
+                    assert 'importe base' not in printable
                     assert '+ IVA' not in printable
                     assert 'Voz web y teléfono comparten' not in printable
                     assert 'Voz IA: 0,27 €/min · Texto IA: 0,30 €/conversación' in printable
@@ -222,7 +233,7 @@ def run():
             assert_layout(page, width)
             assert 'NaN' not in text(page, '#propuesta') and 'undefined' not in text(page, '#propuesta')
             if width in (390, 1440):
-                for name, selector in [('offer', '.offer-value'), ('quote', '.quote-summary'), ('bundles', '#bonos-voz'), ('whatsapp', '#whatsapp-costes'), ('included-channel', '#whatsapp-included')]:
+                for name, selector in [('offer', '.offer-value'), ('quote', '.quote-summary'), ('bundles', '#bonos-voz'), ('whatsapp', '#whatsapp-costes'), ('included-channel', '#whatsapp-included'), ('vat-note', '#commercial-tax-note')]:
                     page.locator(selector).screenshot(path=str(SHOTS / f'{width}-{name}.png'))
                 page.emulate_media(media='print')
                 page.locator('#print-proposal-document').screenshot(path=str(SHOTS / f'{width}-basic-print.png'))
@@ -245,11 +256,8 @@ def run():
             page.evaluate('window.print = () => {window.__printCalled = true;}')
             page.locator('#print-proposal').click()
             assert page.evaluate('window.__printCalled')
-            assert '597 €/mes · importe base' in text(page, '#print-proposal-document')
-            assert 'No se confirma una exención ni un IVA del 0 %' in text(page, '#print-proposal-document')
-            page.locator('#fiscal-summary a').click()
-            assert page.locator('#consumo').get_attribute('open') is not None
-            assert page.locator('#fiscal-terms').is_visible()
+            assert '597 €/mes' in text(page, '#print-proposal-document')
+            assert text(page, '#print-proposal-document').endswith('Todos los precios son sin IVA.')
             page.locator('#consumo > summary').click()
             assert page.locator('#consumo').get_attribute('open') is None
             page.locator('.quote-meta-note a').click()
