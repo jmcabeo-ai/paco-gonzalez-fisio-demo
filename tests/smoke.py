@@ -263,20 +263,15 @@ def run():
             page.locator('.quote-meta-note a').click()
             assert page.locator('#consumo').get_attribute('open') is not None
             assert page.locator('#whatsapp-costes').is_visible()
-            page.locator('#activate-demo').click()
-            assert page.locator('#demo-privacy').is_visible() and not requests
-            page.keyboard.press('Escape')
-            assert page.locator('#demo-privacy').is_hidden()
-            page.locator('#activate-demo').click()
-            page.locator('#confirm-demo').click()
-            page.wait_for_function('document.querySelectorAll("script[data-widget-id]").length === 2')
-            assert len(requests) == 2
-            assert page.locator('script[data-widget-id="6abe41a6cdeb03a6d5b9b175"]').count() == 1
-            assert page.locator('script[data-widget-id="6abe4375b9739b959273ef08"]').count() == 1
-            assert page.locator('#stop-demo').is_visible()
+            assert page.locator('#activate-demo').is_disabled()
+            assert page.locator('#confirm-demo').is_disabled()
+            assert page.locator('#stop-demo').is_hidden()
+            assert page.locator('.live-demo-panel').is_hidden()
+            assert page.locator('.voice-demo-panel').is_hidden()
             page.locator('[data-open-privacy]').click()
             assert page.locator('#confirm-demo').is_hidden()
             page.keyboard.press('Escape')
+            assert not requests and page.locator('script[data-widget-id]').count() == 0
             assert not errors, (width, errors)
             context.close()
             print(f'OK {width}px: 48 limited-plan scenarios + 6 unlimited scenarios, print/mail/links/privacy/layout.', flush=True)
@@ -331,4 +326,4 @@ def run():
 
 if __name__ == '__main__':
     run()
-    print('OK: three plans 197/297/597 + setup997, 5 viewports, 270 use scenarios, unlimited has no bundles/overage, secondary terms with deep links, Meta tariffs, print/mail/share and clipboard fallback, legacy/invalid links, unchanged consent-gated widgets. Microphone demo-only; production inbound phone calls. No real conversations or subscriptions.')
+    print('OK: three plans 197/297/597 + setup997, 5 viewports, 270 use scenarios, print/mail/share, legacy/invalid links. Former demo widgets removed: zero provider requests and disabled activation. No real conversations or subscriptions.')

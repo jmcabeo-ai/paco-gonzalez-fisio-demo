@@ -265,51 +265,24 @@
     if (target) target.scrollIntoView({ block: 'start' });
   });
 
-  // The demo widgets do not contact their providers until explicitly requested.
+  // The former demo account is being reused. This page must never load its widgets.
   const privacyDialog = document.getElementById('demo-privacy');
   const activateButton = document.getElementById('activate-demo');
   const confirmButton = document.getElementById('confirm-demo');
-  let widgetsRequested = false;
   function openPrivacy() {
-    confirmButton.hidden = widgetsRequested;
+    confirmButton.hidden = true;
     privacyDialog.showModal();
   }
-  activateButton.addEventListener('click', openPrivacy);
+  activateButton.disabled = true;
+  activateButton.textContent = 'ASISTENTES RETIRADOS DE ESTA DEMO';
+  confirmButton.disabled = true;
+  confirmButton.hidden = true;
+  document.getElementById('stop-demo').hidden = true;
+  setText('demo-activation-status', 'La prueba de chat y voz se ha retirado. Esta página ya no carga los asistentes ni accede a la cuenta de demostración.');
+  setText('voice-widget-mount', 'PRUEBA DE VOZ RETIRADA');
   document.querySelectorAll('[data-open-privacy]').forEach(function (button) { button.addEventListener('click', openPrivacy); });
   document.querySelectorAll('[data-close-privacy]').forEach(function (button) { button.addEventListener('click', function () { privacyDialog.close(); }); });
   privacyDialog.addEventListener('click', function (event) { if (event.target === privacyDialog) privacyDialog.close(); });
-  function loadWidget(id, parent) {
-    return new Promise(function (resolve, reject) {
-      const script = document.createElement('script');
-      script.src = 'https://widgets.leadconnectorhq.com/loader.js';
-      script.dataset.resourcesUrl = 'https://widgets.leadconnectorhq.com/chat-widget/loader.js';
-      script.dataset.widgetId = id;
-      script.onload = resolve;
-      script.onerror = reject;
-      parent.append(script);
-    });
-  }
-  confirmButton.addEventListener('click', async function () {
-    if (widgetsRequested) return;
-    widgetsRequested = true;
-    privacyDialog.close();
-    activateButton.disabled = true;
-    activateButton.textContent = 'CARGANDO ASISTENTES…';
-    const mount = document.getElementById('voice-widget-mount');
-    mount.replaceChildren();
-    document.getElementById('stop-demo').hidden = false;
-    setText('demo-activation-status', 'Cargando chat y voz. Usa solo datos ficticios.');
-    try {
-      await loadWidget('6abe41a6cdeb03a6d5b9b175', mount);
-      await loadWidget('6abe4375b9739b959273ef08', document.body);
-      activateButton.textContent = 'ASISTENTES SOLICITADOS ✓';
-      setText('demo-activation-status', 'Abre la burbuja para escribir o el visualizador para hablar. Si no aparecen, desactiva y vuelve a probar con conexión a Internet.');
-    } catch (error) {
-      activateButton.textContent = 'NO SE PUDO CARGAR';
-      setText('demo-activation-status', 'Revisa tu conexión. Desactiva y recarga para volver a intentarlo; no se ha enviado ninguna consulta desde esta página.');
-    }
-  });
-  document.getElementById('stop-demo').addEventListener('click', function () { window.location.reload(); });
   document.querySelector('.monthly-total').setAttribute('aria-live', 'polite');
 
   if ('IntersectionObserver' in window) {
